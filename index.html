@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>你的正缘类型测试</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+        
+        :root {
+            --pink-light: #FFE4E1;
+            --pink-main: #FFB6C1;
+            --pink-dark: #FF69B4;
+            --blue-main: #87CEEB;
+            --blue-dark: #4682B4;
+            --green-main: #98FB98;
+            --green-dark: #3CB371;
+            --text-dark: #333;
+            --box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--pink-light);
+            background-image: 
+                linear-gradient(45deg, #ffd1dc 25%, transparent 25%, transparent 75%, #ffd1dc 75%, #ffd1dc),
+                linear-gradient(45deg, #ffd1dc 25%, transparent 25%, transparent 75%, #ffd1dc 75%, #ffd1dc);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 15px 10px; 
+            color: var(--text-dark);
+            overflow-y: auto;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border: 4px solid var(--pink-main);
+            border-radius: 16px;
+            box-shadow: 6px 6px 0px var(--pink-dark), 0 5px 15px rgba(0,0,0,0.08);
+            padding: 20px 15px; 
+            position: relative;
+            margin: auto 0; 
+        }
+
+        /* 右上角水印 */
+        .watermark {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 18px; 
+            font-weight: bold;
+            color: var(--pink-dark);
+            text-shadow: 1px 1px 0px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 2px 2px 0px var(--pink-main);
+            z-index: 10;
+            opacity: 0.9;
+            pointer-events: none; 
+        }
+        
+        .logo-icon {
+            width: 32px; 
+            height: 32px;
+            filter: drop-shadow(1px 1px 0px #fff);
+        }
+
+        /* 装饰元素 */
+        .deco-star { position: absolute; color: var(--blue-main); font-size: 20px; animation: float 3s ease-in-out infinite; }
+        .deco-star:nth-child(2) { top: 15px; left: 15px; } 
+        .deco-star:nth-child(3) { top: 50px; right: 20px; animation-delay: 1s; font-size: 16px; color: var(--green-main); }
+        .deco-star:nth-child(4) { bottom: 15px; left: 20px; animation-delay: 2s; font-size: 14px; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* 页面切换 */
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 开始页 */
+        .start-title { text-align: center; color: var(--pink-dark); font-size: 26px; margin-top: 30px; margin-bottom: 15px; text-shadow: 2px 2px 0px #fff, 3px 3px 0px var(--pink-main); }
+        .start-desc { text-align: center; font-size: 18px; line-height: 1.6; margin-bottom: 15px; color: #555; }
+        .disclaimer { text-align: center; font-size: 14px; color: #888; margin-bottom: 25px; }
+        
+        .btn-main {
+            display: block; width: 90%; margin: 0 auto; padding: 15px;
+            background: linear-gradient(180deg, var(--pink-main) 0%, var(--pink-dark) 100%);
+            border: 3px solid #fff; border-radius: 25px; color: #fff; font-size: 20px; text-align: center;
+            box-shadow: 0 5px 0px #d94f8a, var(--box-shadow); cursor: pointer; transition: all 0.1s;
+        }
+        .btn-main:active { transform: translateY(3px); box-shadow: 0 2px 0px #d94f8a, var(--box-shadow); }
+
+        /* 答题页头部 */
+        .header-bar { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            margin-bottom: 20px; 
+            margin-top: 25px; 
+            background: var(--blue-main); 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            border: 2px solid #fff; 
+            box-shadow: var(--box-shadow); 
+            color: #fff; 
+        }
+        
+        /* 上一题按钮 */
+        .nav-btn {
+            font-size: 16px;
+            padding: 6px 12px;
+            background: #fff;
+            border: 2px solid var(--blue-dark);
+            border-radius: 8px;
+            color: var(--blue-dark);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .nav-btn:active { transform: translateY(2px); box-shadow: none; }
+        .nav-btn.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            background: #eee;
+            color: #999;
+            border-color: #ccc;
+        }
+
+        /* 进度条与题号（可点击） */
+        .progress-container { flex: 1; background: #fff; height: 14px; border-radius: 7px; margin: 0 12px; overflow: hidden; border: 1px solid var(--blue-dark); pointer-events: none;}
+        .progress-bar { height: 100%; background: var(--green-main); width: 0%; transition: width 0.3s ease; }
+        
+        .question-count { 
+            font-size: 16px; 
+            white-space: nowrap; 
+            color: var(--blue-dark); 
+            font-weight: bold; 
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .question-count::after { content: '▼'; font-size: 10px; margin-bottom: 2px;}
+        .question-count:active { opacity: 0.7; }
+        
+        .question-box { 
+            background: var(--pink-light); padding: 20px 15px; border-radius: 12px; margin-bottom: 20px; 
+            border: 3px solid var(--pink-main); box-shadow: inset 0 0 10px rgba(255,255,255,0.5), var(--box-shadow); 
+            min-height: 100px; display: flex; align-items: center; justify-content: center; 
+            text-align: center; font-size: 20px; line-height: 1.5; color: #444;
+        }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { 
+            background: #fff; border: 2px solid var(--blue-main); border-radius: 10px; padding: 12px 15px; 
+            font-size: 17px; text-align: left; cursor: pointer; transition: all 0.2s; 
+            box-shadow: var(--box-shadow); display: flex; align-items: center; 
+        }
+        .option-btn:hover, .option-btn:active { background: var(--blue-main); color: #fff; transform: translateX(3px); }
+        .option-btn .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--blue-main); margin-right: 12px; flex-shrink: 0; transition: all 0.2s; }
+        
+        /* 回显选中的高亮样式 */
+        .option-btn.selected {
+            background: var(--blue-main);
+            color: #fff;
+            border-color: var(--blue-dark);
+            transform: translateX(3px);
+        }
+        .option-btn.selected .radio {
+            border-color: #fff;
+            background-color: var(--pink-main);
+            box-shadow: inset 0 0 0 2px var(--blue-main); 
+        }
+
+        /* 跳转题号弹窗 */
+        .nav-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
+            display: none; justify-content: center; align-items: center; z-index: 100;
+        }
+        .nav-modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+        
+        .nav-modal-content {
+            background: #fff; width: 90%; max-width: 450px; max-height: 80vh;
+            border: 4px solid var(--blue-main); border-radius: 16px;
+            padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex; flex-direction: column;
+        }
+        .nav-modal-title { text-align: center; color: var(--blue-dark); font-size: 20px; margin-bottom: 15px; font-weight: bold; }
+        
+        .nav-grid { 
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; 
+            overflow-y: auto; padding-right: 5px; margin-bottom: 15px; 
+        }
+        @media (max-width: 480px) { .nav-grid { grid-template-columns: repeat(5, 1fr); gap: 8px; } }
+
+        .nav-item {
+            aspect-ratio: 1; display: flex; justify-content: center; align-items: center;
+            border-radius: 8px; font-size: 16px; font-weight: bold;
+            border: 2px solid var(--blue-main); background: #fff; color: var(--blue-dark);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .nav-item.answered { background: var(--green-main); color: var(--text-dark); border-color: var(--green-dark); }
+        .nav-item.answered:active { transform: scale(0.9); }
+        .nav-item.current { background: var(--pink-main); color: #fff; border-color: var(--pink-dark); transform: scale(1.05); box-shadow: 0 2px 5px rgba(255,105,180,0.4); }
+        .nav-item.unanswered { background: #f0f0f0; color: #ccc; border-color: #ddd; pointer-events: none; }
+
+        .btn-close-modal {
+            padding: 10px; background: var(--pink-main); border: none; border-radius: 10px;
+            color: #fff; font-size: 16px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 3px 0px var(--pink-dark); transition: all 0.1s; text-align: center;
+        }
+        .btn-close-modal:active { transform: translateY(2px); box-shadow: 0 1px 0px var(--pink-dark); }
+
+        /* 结果页 */
+        .result-title { text-align: center; font-size: 26px; color: var(--pink-dark); margin-top: 30px; margin-bottom: 12px; }
+        .result-subtitle { text-align: center; font-size: 20px; color: #fff; margin-bottom: 20px; background: var(--blue-main); display: inline-block; padding: 6px 20px; border-radius: 20px; border: 2px solid #fff; box-shadow: var(--box-shadow); margin-left: 50%; transform: translateX(-50%); text-shadow: 1px 1px 0px var(--blue-dark); }
+        
+        .destiny-card {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6e6fa 100%);
+            border: 3px solid var(--blue-main); border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: var(--box-shadow);
+        }
+        .destiny-card h3 { color: var(--blue-dark); margin-bottom: 12px; font-size: 19px; border-bottom: 2px dashed var(--blue-main); padding-bottom: 8px; text-align: center;}
+        .destiny-item { margin-bottom: 12px; font-size: 16px; line-height: 1.6; color: #333;}
+        .destiny-item:last-child { margin-bottom: 0; }
+        .destiny-item span.label { display: inline-block; background: var(--pink-main); color: #fff; padding: 2px 8px; border-radius: 6px; font-size: 14px; margin-right: 6px; box-shadow: 1px 1px 0px var(--pink-dark); vertical-align: middle;}
+
+        .self-analysis-box { background: #fff; border: 2px solid var(--green-main); border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 16px; line-height: 1.6; }
+        .self-analysis-box h3 { color: var(--green-dark); margin-bottom: 10px; font-size: 18px; text-align: center;}
+        
+        .section-title { color: var(--blue-dark); margin-bottom: 12px; text-align: center; font-size: 19px; }
+        .table-wrap { width: 100%; overflow-x: auto; margin-bottom: 20px; box-shadow: var(--box-shadow); border-radius: 8px;}
+        .analysis-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+        .analysis-table th, .analysis-table td { border: 2px solid var(--blue-main); padding: 10px 5px; text-align: center; }
+        .analysis-table th { background: var(--blue-main); color: #fff; white-space: nowrap;}
+        .analysis-table tr:nth-child(even) { background: var(--pink-light); }
+        .tag { padding: 3px 8px; border-radius: 8px; font-size: 13px; color: #fff; display: inline-block; }
+        .tag-high { background: var(--pink-dark); }
+        .tag-mid { background: var(--green-dark); }
+        .tag-low { background: var(--blue-dark); }
+
+        /* 移动端特调 */
+        @media (max-width: 480px) {
+            #app { border-width: 3px; padding: 15px 10px; }
+            .watermark { font-size: 16px; top: 12px; right: 12px; }
+            .logo-icon { width: 28px; height: 28px; } 
+            .start-title { font-size: 22px; margin-top: 35px; }
+            .start-desc { font-size: 16px; }
+            .question-box { font-size: 18px; padding: 15px 10px; min-height: 80px; }
+            .option-btn { font-size: 16px; padding: 10px 12px; gap: 8px; }
+            .option-btn .radio { width: 16px; height: 16px; margin-right: 10px; }
+            .result-title { font-size: 22px; margin-top: 35px; }
+            .result-subtitle { font-size: 18px; }
+            .destiny-item { font-size: 15px; }
+            .self-analysis-box { font-size: 15px; }
+            .analysis-table th, .analysis-table td { padding: 8px 2px; font-size: 14px; }
+            
+            .nav-btn { font-size: 14px; padding: 5px 8px; }
+            .progress-container { margin: 0 8px; }
+            .question-count { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- 右上角水印 -->
+    <div class="watermark">
+        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M 35 40 L 48 10 L 60 35" />
+                <path d="M 60 35 L 82 12 L 75 45" />
+                <path d="M 50 35 C 15 35, 15 85, 50 85 C 85 85, 85 35, 50 35 Z" />
+                <path d="M 50 38 C 75 38, 75 82, 50 82 C 25 82, 25 38, 50 38 Z" />
+                <ellipse cx="50" cy="60" rx="5" ry="14" fill="#ffffff" />
+            </g>
+            <g fill="none" stroke="#666666" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M 35 40 L 48 10 L 60 35" />
+                <path d="M 60 35 L 82 12 L 75 45" />
+                <path d="M 50 35 C 15 35, 15 85, 50 85 C 85 85, 85 35, 50 35 Z" />
+                <path d="M 50 38 C 75 38, 75 82, 50 82 C 25 82, 25 38, 50 38 Z" />
+                <ellipse cx="50" cy="60" rx="5" ry="14" fill="#666666" stroke="none" />
+            </g>
+        </svg>
+        <span>小斯特制</span>
+    </div>
+
+    <div class="deco-star">✦</div>
+    <div class="deco-star">★</div>
+    <div class="deco-star">✧</div>
+
+    <!-- 开始页 -->
+    <div id="start-screen" class="screen active">
+        <h1 class="start-title">💖 真正属于你的正缘类型 💖</h1>
+        <p class="start-desc">
+            每个人在恋爱中都有自己独特的依恋模式。<br>
+            你的正缘长什么样？是什么性格？<br>
+            通过36道轻松的心理测验，<br>
+            揭秘与你灵魂契合的那个TA！
+        </p>
+        <p class="disclaimer">* 本测试基于心理学理论设计，结果仅供参考</p>
+        <div class="btn-main" onclick="startQuiz()">开始测试 ▶</div>
+    </div>
+
+    <!-- 答题页 -->
+    <div id="quiz-screen" class="screen">
+        <div class="header-bar">
+            <!-- 上一题按钮 -->
+            <div id="prev-btn" class="nav-btn disabled" onclick="prevQuestion()">＜ 上一题</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <!-- 点击题号唤起快捷跳转 -->
+            <div class="question-count" id="question-count" onclick="openNavModal()">1 / 36</div>
+        </div>
+        
+        <div class="question-box" id="question-text">
+            题目加载中...
+        </div>
+        
+        <div class="options" id="options-container">
+            <!-- 选项由JS生成 -->
+        </div>
+    </div>
+
+    <!-- 结果页 -->
+    <div id="result-screen" class="screen">
+        <h2 class="result-title">✨ 你的正缘揭秘 ✨</h2>
+        <div class="result-subtitle" id="result-type">傲娇小猫咪</div>
+        
+        <div class="destiny-card" id="destiny-profile"></div>
+        <div class="self-analysis-box" id="self-analysis"></div>
+
+        <h3 class="section-title">📊 你的依恋维度分析</h3>
+        <div class="table-wrap">
+            <table class="analysis-table" id="analysis-table">
+                <thead>
+                    <tr>
+                        <th>维度名称</th>
+                        <th>得分 (满分48)</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- 已经移除了返回大厅/重新测试的按钮 -->
+    </div>
+</div>
+
+<!-- 快捷跳转弹窗 -->
+<div id="nav-modal" class="nav-modal-overlay" onclick="closeNavModal(event)">
+    <div class="nav-modal-content" onclick="event.stopPropagation()">
+        <div class="nav-modal-title">📍 题目快捷跳转</div>
+        <div class="nav-grid" id="nav-grid-container">
+            <!-- 题号由JS生成 -->
+        </div>
+        <div class="btn-close-modal" onclick="closeNavModal()">关闭</div>
+    </div>
+</div>
+
+<script>
+    // 题库数据 (36题)
+    const questions = [
+        { text: "我喜欢和伴侣分享生活中的点点滴滴。", dim: 1, reverse: false },
+        { text: "我渴望经常收到伴侣的消息和问候。", dim: 1, reverse: false },
+        { text: "和伴侣待在一起时，我会感到非常安心。", dim: 1, reverse: false },
+        { text: "我希望伴侣能随时知道我的行踪和状态。", dim: 1, reverse: false },
+        { text: "我喜欢在公众场合和伴侣有一些亲昵的举动。", dim: 1, reverse: false },
+        { text: "伴侣的拥抱和肢体接触能让我迅速放松。", dim: 1, reverse: false },
+        { text: "我希望我们有许多共同的兴趣爱好和活动。", dim: 1, reverse: false },
+        { text: "我期待伴侣能秒回我的信息。", dim: 1, reverse: false },
+        { text: "我喜欢两个人一起规划未来并为之努力。", dim: 1, reverse: false },
+        { text: "我觉得一个人待着比和伴侣待在一起更舒服。", dim: 1, reverse: true },
+        { text: "我经常觉得伴侣太黏人了，让我感到有压力。", dim: 1, reverse: true },
+        { text: "我更倾向于自己独自完成事情，而不是依赖伴侣。", dim: 1, reverse: true },
+
+        { text: "即使恋爱了，我也需要大量的个人独处时间。", dim: 2, reverse: false },
+        { text: "我认为每个人在关系中都应该有自己的小秘密。", dim: 2, reverse: false },
+        { text: "我不想因为恋爱而放弃自己的爱好或社交圈。", dim: 2, reverse: false },
+        { text: "遇到问题时，我更习惯自己先想办法解决。", dim: 2, reverse: false },
+        { text: "伴侣过度关心我的私人生活时，我会感到不适。", dim: 2, reverse: false },
+        { text: "我欣赏那种能在精神上各自独立的恋爱关系。", dim: 2, reverse: false },
+        { text: "我希望伴侣不要干涉我的工作和人生规划。", dim: 2, reverse: false },
+        { text: "看到伴侣和异性正常交往，我不会感到吃醋。", dim: 2, reverse: false },
+        { text: "我喜欢有距离感的恋爱，小别胜新婚。", dim: 2, reverse: false },
+        { text: "如果没有伴侣陪伴，我就会觉得生活没有意义。", dim: 2, reverse: true },
+        { text: "我经常需要伴侣帮我做决定，因为我自己拿不定主意。", dim: 2, reverse: true },
+        { text: "我极度害怕独处，总是希望有人陪着我。", dim: 2, reverse: true },
+
+        { text: "我相信伴侣是忠诚的，不会背着我做坏事。", dim: 3, reverse: false },
+        { text: "伴侣没有及时回复信息时，我不会胡乱猜测。", dim: 3, reverse: false },
+        { text: "我愿意向伴侣坦诚我过去的经历和内心的恐惧。", dim: 3, reverse: false },
+        { text: "我认为我们的关系是稳定的，不会轻易破裂。", dim: 3, reverse: false },
+        { text: "当伴侣提出不同意见时，我不会觉得他/她在否定我。", dim: 3, reverse: false },
+        { text: "我不害怕在伴侣面前展现自己脆弱的一面。", dim: 3, reverse: false },
+        { text: "我相信伴侣在关键时刻会支持我。", dim: 3, reverse: false },
+        { text: "我不担心伴侣会因为别人而离开我。", dim: 3, reverse: false },
+        { text: "我对我们之间的感情充满信心。", dim: 3, reverse: false },
+        { text: "我经常担心伴侣不像我爱他/她那样爱我。", dim: 3, reverse: true },
+        { text: "只要伴侣不在身边，我就会感到不安和焦虑。", dim: 3, reverse: true },
+        { text: "我很容易因为伴侣的一句无心之言而胡思乱想。", dim: 3, reverse: true }
+    ];
+
+    const options = [
+        { text: "非常符合", value: 5 },
+        { text: "比较符合", value: 4 },
+        { text: "一般 / 中立", value: 3 },
+        { text: "比较不符合", value: 2 },
+        { text: "非常不符合", value: 1 }
+    ];
+
+    let currentQuestionIndex = 0;
+    let scores = { 1: 0, 2: 0, 3: 0 };
+    // 存放答案记录的数组：index对应题目，内容为 { dim, score, value }
+    let userAnswers = []; 
+
+    function startQuiz() {
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResult();
+            return;
+        }
+        const q = questions[currentQuestionIndex];
+        
+        // 更新进度条与题号
+        const progress = (currentQuestionIndex / questions.length) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+        document.getElementById('question-count').innerText = `${currentQuestionIndex + 1} / ${questions.length}`;
+        
+        // 更新题目
+        document.getElementById('question-text').innerText = q.text;
+
+        // 处理“上一题”按钮的禁用状态
+        const prevBtn = document.getElementById('prev-btn');
+        if (currentQuestionIndex === 0) {
+            prevBtn.classList.add('disabled');
+        } else {
+            prevBtn.classList.remove('disabled');
+        }
+
+        // 渲染选项
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        
+        // 获取当前题目是否已经有历史作答记录
+        const prevAnswer = userAnswers[currentQuestionIndex];
+
+        options.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            
+            // 如果有历史记录且选中的值和当前选项一致，添加高亮样式
+            if (prevAnswer && prevAnswer.value === opt.value) {
+                btn.classList.add('selected');
+            }
+
+            btn.innerHTML = `<div class="radio"></div> <span>${opt.text}</span>`;
+            btn.onclick = () => selectOption(opt.value, q.dim, q.reverse);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(value, dim, reverse) {
+        let score = reverse ? (6 - value) : value;
+        
+        // 如果这题之前做过，先减掉之前加过的分数
+        if (userAnswers[currentQuestionIndex]) {
+            let oldAnswer = userAnswers[currentQuestionIndex];
+            scores[oldAnswer.dim] -= oldAnswer.score;
+        }
+        
+        // 记录或覆盖当前题目的答案
+        userAnswers[currentQuestionIndex] = { dim: dim, score: score, value: value };
+        
+        // 加上新的分数
+        scores[dim] += score;
+        
+        // 防止连点
+        document.getElementById('options-container').style.pointerEvents = 'none';
+        
+        // 视觉反馈
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(b => b.classList.remove('selected'));
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            document.getElementById('options-container').style.pointerEvents = 'auto';
+            renderQuestion();
+        }, 150);
+    }
+
+    // 返回上一题
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+        }
+    }
+
+    // 快捷跳转相关逻辑
+    function openNavModal() {
+        const gridContainer = document.getElementById('nav-grid-container');
+        gridContainer.innerHTML = '';
+        
+        questions.forEach((_, index) => {
+            const item = document.createElement('div');
+            item.className = 'nav-item';
+            item.innerText = index + 1;
+            
+            const isAnswered = userAnswers[index] !== undefined;
+            const isCurrent = index === currentQuestionIndex;
+            
+            if (isCurrent) {
+                item.classList.add('current');
+            } else if (isAnswered) {
+                item.classList.add('answered');
+                item.onclick = () => jumpToQuestion(index);
+            } else {
+                item.classList.add('unanswered');
+            }
+            
+            gridContainer.appendChild(item);
+        });
+        
+        document.getElementById('nav-modal').classList.add('active');
+    }
+
+    function closeNavModal(event) {
+        if (!event || event.target.id === 'nav-modal' || event.target.className === 'btn-close-modal') {
+            document.getElementById('nav-modal').classList.remove('active');
+        }
+    }
+
+    function jumpToQuestion(index) {
+        currentQuestionIndex = index;
+        document.getElementById('nav-modal').classList.remove('active');
+        renderQuestion();
+    }
+
+    // 结果文案配置
+    const detailedResults = {
+        "m1": { 
+            type: "黏人精小怪兽",
+            destiny: `
+                <h3>🔮 你的正缘画像揭秘</h3>
+                <div class="destiny-item"><span class="label">气质特征</span> 情绪稳定、自带“爹系/妈系”光环。TA看起来非常有安全感，笑容温暖治愈，声音通常很温柔，身上有淡淡的洗衣液或木质调香味。</div>
+                <div class="destiny-item"><span class="label">性格特质</span> 极度包容，钝感力强（不会轻易被你的小情绪激怒）。TA是一个实干派，比起说甜言蜜语，更喜欢用实际行动照顾你的起居，非常有耐心。</div>
+                <div class="destiny-item"><span class="label">最佳相处</span> TA会把你当成小朋友来宠爱。当你焦虑、胡思乱想时，TA能像顺毛一样安抚你。你们的关系是“治愈与被治愈”的完美结合。</div>
+                <div class="destiny-item"><span class="label">相遇场景猜想</span> 可能是比你年长/成熟的前辈，或者是在你生病、遇到困难时给予你极大帮助的人。很容易在图书馆、医院或朋友聚会中，因为TA照顾人的细节而对你产生致命吸引力。</div>
+            `,
+            self: `
+                <h3>🧸 你的恋爱模式</h3>
+                <p>你内心极其重感情且敏感细腻。在感情中，你容易缺乏安全感，希望伴侣随时随地都在你身边。一旦陷入爱情，你就会毫无保留地付出，极度渴望与伴侣建立深度的联结，你需要通过频繁的联系和陪伴来确认自己被爱着。</p>
+                <p style="color:var(--pink-dark); margin-top:8px;">💡 <b>恋爱小贴士：</b>试着把部分注意力转移到自己身上，培养独立的兴趣爱好，给伴侣留一点喘息的空间，感情会走得更长久哦。</p>
+            `
+        },
+        "m2": { 
+            type: "傲娇小猫咪",
+            destiny: `
+                <h3>🔮 你的正缘画像揭秘</h3>
+                <div class="destiny-item"><span class="label">气质特征</span> 干净清爽，穿搭有品位，自带一种“游刃有余”的松弛感。TA可能有着好看的桃花眼，或者非常迷人的笑容，是人群中亮眼的存在。</div>
+                <div class="destiny-item"><span class="label">性格特质</span> 高情商，懂进退，能完美接住你的各种梗。TA既能陪你疯闹，也能在你需要安静时默默陪伴。有着很强的边界感，绝不让人窒息。</div>
+                <div class="destiny-item"><span class="label">最佳相处</span> 你们是“灵魂共鸣”的玩伴。不需要天天腻在一起，但每次见面都有说不完的话。你们尊重彼此的爱好，甚至能发展出共同的奇妙兴趣。</div>
+                <div class="destiny-item"><span class="label">相遇场景猜想</span> 非常容易在兴趣社群、旅行途中、音乐节或剧本杀店相遇。可能是一次偶然的眼神交汇，或是对同一个冷门爱好的探讨，让你们瞬间觉得“就是TA了”。</div>
+            `,
+            self: `
+                <h3>🧸 你的恋爱模式</h3>
+                <p>你就像一只傲娇的小猫咪，看似独立，实则内心柔软。你既渴望主人的抚摸（亲密），也要保留自己高冷的小空间（边界）。在亲密关系中，你懂得在依赖与独立之间寻找完美的平衡点。</p>
+                <p style="color:var(--pink-dark); margin-top:8px;">💡 <b>恋爱小贴士：</b>偶尔放下傲娇，直接坦诚地表达自己的需求和爱意，会让伴侣更懂你，关系也会更加亲密。</p>
+            `
+        },
+        "m3": { 
+            type: "高冷独行侠",
+            destiny: `
+                <h3>🔮 你的正缘画像揭秘</h3>
+                <div class="destiny-item"><span class="label">气质特征</span> 沉稳内敛，甚至带点禁欲系。不笑的时候看起来有点生人勿近，但笑起来反差萌极大。身材通常保持得不错，自带强大气场。</div>
+                <div class="destiny-item"><span class="label">性格特质</span> 绝对的理智派，尊重规则与边界。TA不会对你查岗，也不会情绪化。遇到问题倾向于冷静沟通，是一个非常可靠、说到做到的“实干家”。</div>
+                <div class="destiny-item"><span class="label">最佳相处</span> 你们是“并肩作战”的战友。不需要多言，一个眼神就能懂对方的决定。周末可以各自待在不同房间看书，互不打扰却又极其安心。</div>
+                <div class="destiny-item"><span class="label">相遇场景猜想</span> 容易在职场、行业峰会、健身房或高端书店相遇。可能是你们在处理某项棘手工作时，被对方展现出的专业能力和强大逻辑所深深折服。</div>
+            `,
+            self: `
+                <h3>🧸 你的恋爱模式</h3>
+                <p>你是一个拥有独立星球的旅人，自我意识强，精神独立，极其注重个人边界和自我成长。哪怕在恋爱中，你也需要大量的私人空间。你更倾向于用行动而不是甜言蜜语来表达爱意，遇到问题习惯自己先消化。</p>
+                <p style="color:var(--pink-dark); margin-top:8px;">💡 <b>恋爱小贴士：</b>偶尔向伴侣展现一下你的脆弱，或者主动制造一点小惊喜，会让对方感受到你其实很在意这段关系。</p>
+            `
+        },
+        "m4": { 
+            type: "理智大魔王",
+            destiny: `
+                <h3>🔮 你的正缘画像揭秘</h3>
+                <div class="destiny-item"><span class="label">气质特征</span> 智性恋的天花板，眼神深邃锐利，举手投足间充满自信。TA的穿着可能很简约，但质感极佳，给人一种“精英”或“大佬”的感觉。</div>
+                <div class="destiny-item"><span class="label">性格特质</span> 思想极其成熟，能看穿你的防备心。TA不会被你的冷暴力或距离感吓跑，反而觉得你很有挑战性。善于深度思考，对人生有清晰的规划。</div>
+                <div class="destiny-item"><span class="label">最佳相处</span> 你们是势均力敌的“合伙人”。你们的日常可能是探讨商业、宏观或哲学问题。不需要肉麻的情话，旗鼓相当的智力交锋就是你们最顶级的调情。</div>
+                <div class="destiny-item"><span class="label">相遇场景猜想</span> 极大概率在高等学府、商学院、创业路演或飞机头等舱相遇。往往是因为一次激烈的观点碰撞，让你注意到这个唯一能在智商上与你匹敌的人。</div>
+            `,
+            self: `
+                <h3>🧸 你的恋爱模式</h3>
+                <p>你简直是恋爱界的一股清流，极度理智、清醒，重视个人成长与实现。你对待感情非常认真且克制，不会轻易开始一段关系。但在对方眼里，你可能有些“刀枪不入”。</p>
+                <p style="color:var(--pink-dark); margin-top:8px;">💡 <b>恋爱小贴士：</b>爱情不是做项目，不需要完美的逻辑。偶尔放下理智，跟着感觉走，享受当下的浪漫和冲动吧。</p>
+            `
+        }
+    };
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+
+        let totalScore = scores[1] + scores[2] + scores[3];
+        let resultKey = "";
+
+        if (totalScore >= 72 && totalScore <= 90) resultKey = "m1";
+        else if (totalScore >= 91 && totalScore <= 109) resultKey = "m2";
+        else if (totalScore >= 110 && totalScore <= 127) resultKey = "m3";
+        else resultKey = "m4";
+
+        const resultData = detailedResults[resultKey];
+        
+        document.getElementById('result-type').innerText = resultData.type;
+        document.getElementById('destiny-profile').innerHTML = resultData.destiny;
+        document.getElementById('self-analysis').innerHTML = resultData.self;
+
+        const tbody = document.querySelector('#analysis-table tbody');
+        tbody.innerHTML = '';
+        const dimNames = { 1: "亲密渴求度", 2: "边界独立度", 3: "安全信任度" };
+        
+        for (let i = 1; i <= 3; i++) {
+            let score = scores[i];
+            let statusText = "", tagClass = "";
+            
+            if (score >= 40) { statusText = "极高"; tagClass = "tag-high"; }
+            else if (score >= 33) { statusText = "中等"; tagClass = "tag-mid"; }
+            else { statusText = "偏低"; tagClass = "tag-low"; }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${dimNames[i]}</td>
+                <td style="font-weight:bold; color:var(--pink-dark);">${score} 分</td>
+                <td><span class="tag ${tagClass}">${statusText}</span></td>
+            `;
+            tbody.appendChild(tr);
+        }
+    }
+</script>
+
+</body>
+</html>
