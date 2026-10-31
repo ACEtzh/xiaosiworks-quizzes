@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的原始基因能不能吃辣</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=ZCOOL+KuaiLe&display=swap');
+
+        :root {
+            --bg-green: #5e6837;
+            --paper: #f4e8c1;
+            --paper-dark: #e6d5a8;
+            --text-dark: #3e2c1c;
+            --accent-orange: #e06d2b;
+            --accent-red: #b33425;
+            --accent-yellow: #f4b842;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-green);
+            /* 模拟参考图中的波点纹理 */
+            background-image: radial-gradient(#6b7c47 15%, transparent 16%), radial-gradient(#6b7c47 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            font-family: 'ZCOOL KuaiLe', 'Patrick Hand', cursive, sans-serif;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 纸板容器 */
+        .container {
+            background-color: var(--paper);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.05);
+            padding: 30px 20px;
+            position: relative;
+            border: 2px dashed #d8c69b;
+        }
+
+        /* 拍立得相框效果 */
+        .polaroid {
+            background: white;
+            /* 这里的顶部 padding 从 25px 调整为 50px，让标题在视觉上往下走，更居中 */
+            padding: 50px 10px 35px 10px; 
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            transform: rotate(-2deg);
+            margin: 0 auto 20px auto;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .polaroid::after {
+            content: "WARM & SPICY";
+            font-family: 'Patrick Hand', cursive;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            color: #d36722;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: var(--accent-red);
+            margin-bottom: 10px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            border-bottom: 2px dashed var(--accent-orange);
+            display: inline-block;
+        }
+
+        .intro-text {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+            border: 3px solid var(--text-dark);
+            padding: 10px 25px;
+            font-size: 18px;
+            font-family: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 4px 4px 0 var(--text-dark);
+            transition: all 0.1s;
+        }
+
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0 0 0 var(--text-dark);
+        }
+
+        /* 隐藏区块 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 题目区 */
+        .question-box {
+            margin-bottom: 20px;
+        }
+
+        .q-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .option {
+            display: block;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            background-color: #f9f4e6;
+        }
+
+        /* 点击时的即时选中反馈：整项填充高亮 */
+        .option.selecting {
+            background-color: var(--accent-orange) !important;
+            color: white !important;
+            border-color: var(--accent-red) !important;
+            transform: scale(0.98);
+        }
+
+        /* 返回上一题的高亮回显 */
+        .option.selected {
+            background-color: #fde9c8 !important;
+            border-color: var(--accent-orange) !important;
+            border-left: 4px solid var(--accent-orange);
+            box-shadow: 0 0 0 2px rgba(224, 109, 43, 0.25);
+        }
+        .option.selected::before {
+            content: '✔ ';
+            color: var(--accent-orange);
+            font-weight: bold;
+        }
+
+        /* 答题页顶部：上一题 + 题号计数 */
+        .quiz-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .prev-btn {
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 var(--text-dark);
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .prev-btn:hover {
+            background-color: #f9ce6f;
+        }
+        .prev-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0 0 0 var(--text-dark);
+        }
+        .prev-btn.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .q-count {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--accent-red);
+            background: #fff;
+            border: 2px solid var(--text-dark);
+            border-radius: 6px;
+            padding: 3px 10px;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #ddd;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 2px solid var(--text-dark);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-orange);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* 结果页 */
+        .result-title {
+            font-size: 22px;
+            color: var(--accent-red);
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .result-score {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-orange);
+            margin-bottom: 15px;
+        }
+
+        .result-desc {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px dashed #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        /* 分析表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border: 2px solid var(--text-dark);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--paper-dark);
+            color: var(--text-dark);
+        }
+
+        .share-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 480px) {
+            .container { padding: 20px 12px; }
+            h1 { font-size: 20px; }
+            .q-title { font-size: 16px; }
+            .option { font-size: 14px; padding: 13px 10px; min-height: 48px; }
+            .btn { font-size: 16px; width: 100%; }
+            .prev-btn { padding: 4px 10px; font-size: 12px; }
+            .q-count { font-size: 12px; padding: 2px 8px; }
+            th, td { padding: 7px 3px; font-size: 12px; }
+            .result-title { font-size: 19px; }
+            .result-desc { font-size: 14px; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 首页 -->
+        <div id="home-page">
+            <div class="polaroid">
+                <h1>🌶️ 我的原始基因能不能吃辣？</h1>
+                <img src="https://api.iconify.design/noto:hot-pepper.svg" alt="chili" style="width: 70px; height: 70px; margin: 10px auto; display: block;">
+            </div>
+            <div class="intro-text">
+                <p>你的基因决定了你面对一碗红油抄手时的态度？科学家发现，日常的饮食偏好与我们的人格特质（OCEAN模型）息息相关。</p>
+                <br>
+                <p>不用挑战变态辣，只需根据你平时的真实饮食习惯作答，来看看你的“吃辣基因”有多强大吧！</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始鉴定</button>
+            <div class="disclaimer">*本测试基于心理学量表改编，结果仅供娱乐参考。</div>
+        </div>
+
+        <!-- 答题页 -->
+        <div id="quiz-page" class="hidden">
+            <div class="quiz-top">
+                <button id="prev-btn" class="prev-btn disabled" onclick="prevQuestion()">＜ 上一题</button>
+                <span class="q-count" id="q-count">1 / 20</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <div class="question-box">
+                <div class="q-title" id="q-title">Question</div>
+                <div id="options-container"></div>
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div id="result-page" class="hidden">
+            <div class="polaroid" style="transform: rotate(1deg); padding: 25px 10px 35px 10px;">
+                <div class="result-title" id="r-title">结果加载中...</div>
+                <div class="result-score" id="r-score">0 分</div>
+            </div>
+            
+            <div class="result-desc" id="r-desc"></div>
+
+            <h2 style="font-size: 16px; margin-bottom: 10px;">🔍 你的吃辣基因图谱</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>人格维度</th>
+                        <th>你的得分</th>
+                        <th>基因解析</th>
+                    </tr>
+                </thead>
+                <tbody id="r-table">
+                    <!-- JS动态填充 -->
+                </tbody>
+            </table>
+
+            <div class="share-text">
+                ✨ 截图分享给你的“饭搭子”吧！ <br> 看看你们的口味到底合不合！
+            </div>
+            <button class="btn" onclick="location.reload()">重新测一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 贴近日常饮食习惯的题库
+        const questions = [
+            // 开放性 (5题，4正1反)
+            { id: 1, text: "点外卖或者下馆子时，我经常主动点带有辣味的菜。", dim: "开放性", reverse: false },
+            { id: 2, text: "遇到没吃过的辣椒品种或辣味调料，我愿意尝一尝。", dim: "开放性", reverse: false },
+            { id: 3, text: "我觉得饭菜里有一点辣味，会让食物更好吃。", dim: "开放性", reverse: false },
+            { id: 4, text: "我点餐时从来只选“不辣”，哪怕是微辣也不考虑。", dim: "开放性", reverse: true },
+            { id: 5, text: "如果朋友推荐一家很火的川菜/湘菜馆，我会很期待去试吃。", dim: "开放性", reverse: false },
+            
+            // 外向性 (5题，4正1反)
+            { id: 6, text: "和朋友聚餐吃火锅时，我倾向于点带辣的锅底。", dim: "外向性", reverse: false },
+            { id: 7, text: "周围的人都在吃辣，我也会被带动跟着一起吃。", dim: "外向性", reverse: false },
+            { id: 8, text: "我喜欢和喜欢吃辣的朋友一起吃饭，感觉更有食欲。", dim: "外向性", reverse: false },
+            { id: 9, text: "我从来不在聚会时主动提议去吃辣味的餐馆。", dim: "外向性", reverse: true },
+            { id: 10, text: "遇到好吃的辣味美食，我会忍不住拍照分享给朋友。", dim: "外向性", reverse: false },
+            
+            // 宜人性 (5题，4正1反)
+            { id: 11, text: "如果一桌人里有不能吃辣的朋友，我会同意点微辣或不辣的菜。", dim: "宜人性", reverse: false },
+            { id: 12, text: "在家里做饭时，我会为了照顾家人的口味而少放或不放辣椒。", dim: "宜人性", reverse: false },
+            { id: 13, text: "朋友推荐了一家好吃的辣味餐厅，即使我不太能吃辣，也愿意为了陪伴而去。", dim: "宜人性", reverse: false },
+            { id: 14, text: "吃辣是我个人的自由，我从来不会为了迁就别人而放弃辣味。", dim: "宜人性", reverse: true },
+            { id: 15, text: "即使我很想吃辣，如果同伴明确拒绝，我通常会妥协。", dim: "宜人性", reverse: false },
+            
+            // 神经质 (5题，3正2反)
+            { id: 16, text: "偶尔吃到辣味，我能很快平复下来，不会觉得特别难受。", dim: "神经质", reverse: false },
+            { id: 17, text: "只要吃了一点辣，我就会觉得胃里火辣辣的很难受。", dim: "神经质", reverse: true },
+            { id: 18, text: "吃完辣味食物后，我通常会觉得很过瘾、很舒服。", dim: "神经质", reverse: false },
+            { id: 19, text: "我一吃辣就会满头大汗，觉得在人前有些尴尬。", dim: "神经质", reverse: true },
+            { id: 20, text: "吃辣出汗时，我会觉得这是一种很畅快的排汗方式。", dim: "神经质", reverse: false }
+        ];
+
+        const options = [
+            { text: "非常符合", value: 5 },
+            { text: "比较符合", value: 4 },
+            { text: "一般/不确定", value: 3 },
+            { text: "比较不符合", value: 2 },
+            { text: "非常不符合", value: 1 }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let dimScores = { "开放性": 0, "外向性": 0, "宜人性": 0, "神经质": 0 };
+
+        // 绑定事件
+        function startTest() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('quiz-page').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            document.getElementById('q-title').innerText = `${currentQuestion + 1}. ${q.text}`;
+            document.getElementById('q-count').innerText = `${currentQuestion + 1} / ${questions.length}`;
+
+            // 更新“上一题”按钮状态
+            const prevBtn = document.getElementById('prev-btn');
+            if (currentQuestion === 0) {
+                prevBtn.classList.add('disabled');
+            } else {
+                prevBtn.classList.remove('disabled');
+            }
+
+            // 更新进度条
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+
+            // 回显上一次选择（返回上一题时高亮）
+            const prevAnswer = userAnswers[currentQuestion];
+
+            options.forEach((opt, index) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                if (prevAnswer && prevAnswer.value === index) {
+                    div.classList.add('selected');
+                }
+                div.innerHTML = `<span style="color:#e06d2b; font-weight:bold; margin-right:10px;">${String.fromCharCode(65 + index)}.</span> ${opt.text}`;
+                div.onclick = () => selectOption(opt.value, index, div);
+                optContainer.appendChild(div);
+            });
+        }
+
+        function selectOption(value, index, element) {
+            // 锁定其他选项，并给当前项明显的选中反馈
+            document.querySelectorAll('.option').forEach(el => {
+                el.style.pointerEvents = 'none';
+                el.classList.remove('selecting');
+            });
+            element.classList.add('selecting');
+
+            // 记录答案（按下标存：返回改选时覆盖，旧记录自动替换）
+            const q = questions[currentQuestion];
+            let finalScore = value;
+            if (q.reverse) {
+                finalScore = 6 - value;
+            }
+            userAnswers[currentQuestion] = {
+                id: q.id,
+                dim: q.dim,
+                value: index,
+                score: finalScore
+            };
+
+            // 延迟跳转
+            setTimeout(() => {
+                currentQuestion++;
+                renderQuestion();
+            }, 300);
+        }
+
+        // 返回上一题：保留该题已选记录用于高亮回显，重新选择会覆盖记录
+        function prevQuestion() {
+            if (currentQuestion === 0) return;
+            currentQuestion--;
+            renderQuestion();
+        }
+
+        function showResult() {
+            document.getElementById('quiz-page').classList.add('hidden');
+            document.getElementById('result-page').classList.remove('hidden');
+
+            let totalScore = 0;
+            
+            // 计算总分和维度分
+            userAnswers.forEach(ans => {
+                totalScore += ans.score;
+                dimScores[ans.dim] += ans.score;
+            });
+
+            // 渲染总分
+            document.getElementById('r-score').innerText = `${totalScore} 分`;
+
+            // 渲染结果文案
+            let title = "";
+            let desc = "";
+            if (totalScore >= 80) {
+                title = "🌶️ 无辣不欢（进阶吃辣达人）";
+                desc = "你的日常饮食绝对离不开辣椒！对你来说，辣椒不仅是调味品，更是灵魂。微辣只是起步，中辣是常态。你能在辣味中感受到食物带来的愉悦感，并且吃辣后身体通常能很快适应。和你做“饭搭子”绝对不会觉得菜没味道！";
+            } else if (totalScore >= 60) {
+                title = "🥘 微辣拥护者（口味包容度高）";
+                desc = "你对吃辣的态度非常随和。你享受辣味带来的轻微刺激，但并不追求极端的辣度。如果朋友想吃辣，你能奉陪到底；如果吃清淡的，你也觉得完全OK。你是饭桌上最让人省心、口味最百搭的优质干饭人。";
+            } else if (totalScore >= 40) {
+                title = "🍃 偶尔尝鲜（温和草食系）";
+                desc = "吃辣对你来说，更像是一种“浅尝辄止”的尝试。你平时更偏爱清淡、温和的食物，只有在特定的菜品（比如稍微带点黑胡椒或微微辣的烧烤）才会觉得不错。一旦辣度超标，你可能就会开始疯狂找水喝了。";
+            } else {
+                title = "🥛 清淡养生派（基因里没有辣）";
+                desc = "你的原始基因里可能真的没有“吃辣”这个选项。你的味蕾和肠胃对辣椒素非常敏感，稍微一点点辣就能让你满头大汗或觉得不适。点餐时的“微辣”，通常是你的极限。你更偏爱清淡的食物，是饭桌上的牛奶/白开水守护者。";
+            }
+
+            document.getElementById('r-title').innerText = title;
+            document.getElementById('r-desc').innerText = desc;
+
+            // 渲染表格
+            const tbody = document.getElementById('r-table');
+            tbody.innerHTML = '';
+            for (const [key, value] of Object.entries(dimScores)) {
+                let traitDesc = "";
+                if (key === "开放性") traitDesc = value > 15 ? "充满好奇心，乐于接受新口味" : "保守稳重，偏爱熟悉的味道";
+                if (key === "外向性") traitDesc = value > 15 ? "社交达人，喜欢跟着大家一起吃" : "内敛安静，按自己的节奏吃";
+                if (key === "宜人性") traitDesc = value > 15 ? "贴心小棉袄，优先照顾他人口味" : "我行我素，自己吃得爽最重要";
+                if (key === "神经质") traitDesc = value > 15 ? "对辣味反应小，心态稳" : "身体对辣敏感，容易产生不适";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${key}</b></td>
+                    <td style="color:var(--accent-red); font-weight:bold;">${value} / 25</td>
+                    <td style="font-size:12px; color:#666;">${traitDesc}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    </script>
+</body>
+</html>
