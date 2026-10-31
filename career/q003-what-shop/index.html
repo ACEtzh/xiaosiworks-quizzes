@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>测测你适合开什么店</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+        :root {
+            --bg-dark: #2b3d41;
+            --bg-forest: #1a2628;
+            --paper: #f4e8d3;
+            --paper-dark: #e3d3b7;
+            --line: #4a3525;
+            --accent: #ff9f43;
+            --text: #3e2a1f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'ZCOOL KuaiLe', 'Comic Sans MS', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 森林背景装饰 */
+        .tree-left, .tree-right {
+            position: fixed;
+            top: 0;
+            width: 15vw;
+            height: 100vh;
+            background: var(--bg-forest);
+            z-index: -1;
+        }
+        .tree-left { left: 0; clip-path: polygon(0 0, 100% 0, 80% 20%, 100% 40%, 85% 60%, 100% 80%, 90% 100%, 0 100%); }
+        .tree-right { right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 80%, 15% 60%, 0 40%, 20% 20%); }
+
+        /* 容器 */
+        .app-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--paper);
+            background-image: radial-gradient(var(--paper-dark) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: 4px solid var(--line);
+            border-radius: 15px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.4);
+            padding: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* 伪元素装饰：复古图钉/胶带 */
+        .app-container::before, .app-container::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 25px;
+            background: rgba(200, 180, 140, 0.6);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .app-container::before { top: -10px; left: 20px; transform: rotate(-5deg); }
+        .app-container::after { bottom: -10px; right: 20px; transform: rotate(3deg); }
+
+        /* 页面切换 */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 首页 */
+        .cover-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--line);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px var(--paper-dark);
+        }
+        .cover-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #6b5a4e;
+        }
+        .cover-img {
+            width: 100%;
+            height: 200px;
+            background: #cbe3e8; /* 模拟地图水域 */
+            border: 3px dashed var(--line);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #8b9fa3;
+            font-size: 1.5rem;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3rem;
+            background: var(--accent);
+            color: #fff;
+            border: 3px solid var(--line);
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--line);
+            transition: all 0.1s;
+            text-align: center;
+            user-select: none;
+        }
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--line);
+        }
+        .disclaimer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        /* 答题页 */
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--paper-dark);
+            border: 2px solid var(--line);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            background: #fff;
+            border: 2px solid var(--line);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 0px var(--line);
+        }
+        .option-btn:hover {
+            background: #fdfaf5;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px var(--line);
+        }
+        .option-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px var(--line);
+        }
+
+        /* 答题页顶部：上一题按钮 + 题目计数 */
+        .quiz-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .prev-btn {
+            background: var(--paper);
+            border: 2px solid var(--line);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.95rem;
+            color: var(--line);
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--line);
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+        .prev-btn:hover {
+            background: var(--paper-dark);
+            transform: translateY(-1px);
+        }
+        .prev-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--line);
+        }
+        .prev-btn.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .quiz-count {
+            font-size: 0.95rem;
+            color: var(--line);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* 选中即时反馈：点击选项时高亮 */
+        .option-btn.selecting {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--line);
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--line);
+        }
+        /* 返回上一题的高亮回显：显示上次选择 */
+        .option-btn.selected {
+            background: #ffe8cc;
+            border-color: var(--accent);
+            box-shadow: 2px 2px 0px var(--accent);
+        }
+        .option-btn.selected::before {
+            content: '✔';
+            display: inline-block;
+            margin-right: 8px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* 结果页 */
+        .result-title {
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--line);
+            margin-bottom: 15px;
+        }
+        .result-card {
+            background: #fff;
+            border: 3px solid var(--line);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 3px 3px 0px var(--line);
+        }
+        .result-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        /* 分析表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            border: 2px solid var(--line);
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: var(--paper-dark);
+        }
+        .radar-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        .radar-bar-bg {
+            flex-grow: 1;
+            height: 12px;
+            background: #eee;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .radar-bar-fill {
+            height: 100%;
+            background: var(--accent);
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 600px) {
+            .app-container { width: 95%; padding: 20px 15px; }
+            .cover-title { font-size: 1.8rem; }
+            .question-text { font-size: 1.1rem; }
+            .option-btn { font-size: 1rem; padding: 10px 15px; }
+            .result-title { font-size: 1.5rem; }
+            .tree-left, .tree-right { display: none; } /* 手机端隐藏侧边树，防遮挡 */
+        }
+
+        /* 小屏手机：触摸区加大、表格紧凑 */
+        @media (max-width: 480px) {
+            .app-container { padding: 15px 12px; }
+            .option-btn { font-size: 0.95rem; padding: 13px 15px; min-height: 48px; }
+            .prev-btn { padding: 5px 10px; font-size: 0.85rem; }
+            .quiz-count { font-size: 0.85rem; }
+            .question-text { font-size: 1.05rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 6px 4px; }
+            .result-desc { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tree-left"></div>
+    <div class="tree-right"></div>
+
+    <div class="app-container">
+        <!-- 首页 -->
+        <div id="page-home" class="page active">
+            <h1 class="cover-title">测测你适合开什么店？</h1>
+            <p class="cover-subtitle">MBTI过时了，现在流行测“老板命”</p>
+            <div class="cover-img">
+                <span style="opacity: 0.5;">🗺️ 你的商业版图正在加载...</span>
+            </div>
+            <div class="btn" onclick="startTest()">开始探索 (共25题)</div>
+            <p class="disclaimer">* 测试结果仅供参考，不构成任何投资建议，创业有风险，入行需谨慎。</p>
+        </div>
+
+        <!-- 答题页 -->
+        <div id="page-question" class="page">
+            <div class="quiz-top">
+                <button id="prev-btn" class="prev-btn disabled" onclick="prevQuestion()">＜ 上一题</button>
+                <span id="quiz-count" class="quiz-count">Q1 / 25</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-container" class="options"></div>
+        </div>
+
+        <!-- 结果页 -->
+        <div id="page-result" class="page">
+            <h2 id="result-title" class="result-title"></h2>
+            <div class="result-card">
+                <p id="result-desc" class="result-desc"></p>
+            </div>
+            
+            <h3 style="margin-bottom: 10px; color: var(--line);">📊 你的老板属性分析表</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>维度属性</th>
+                        <th>得分(满分25)</th>
+                        <th>能力分析</th>
+                    </tr>
+                </thead>
+                <tbody id="analysis-table-body">
+                    <!-- JS动态生成 -->
+                </tbody>
+            </table>
+
+            <div class="btn" style="margin-top: 20px;" onclick="location.reload()">重新测试 / 分享给朋友</div>
+        </div>
+    </div>
+
+    <script>
+        // 题库数据
+        const questions = [
+            // O 开放性 (奇思妙想)
+            { dim: 'O', text: '我喜欢尝试把两种完全不相干的东西组合在一起。', reverse: false },
+            { dim: 'O', text: '对于店铺的装修和包装，我脑子里总有很多天马行空的想法。', reverse: false },
+            { dim: 'O', text: '我经常关注潮流趋势，喜欢购买有设计感的小物件。', reverse: false },
+            { dim: 'O', text: '我觉得开店只要卖大众最需要的东西就行，不需要搞花里胡哨的创新。', reverse: true },
+            { dim: 'O', text: '相比一成不变，我更愿意接受新鲜事物带来的刺激感。', reverse: false },
+            // C 尽责性 (细节强迫)
+            { dim: 'C', text: '我会把每天的收支明细记录得清清楚楚。', reverse: false },
+            { dim: 'C', text: '做事情之前，我喜欢列出详细的计划表。', reverse: false },
+            { dim: 'C', text: '我无法忍受商品摆放得乱七八糟，必须整齐归类。', reverse: false },
+            { dim: 'C', text: '我经常因为拖延症，把今天该进的货拖到明天。', reverse: true },
+            { dim: 'C', text: '我注重流程和规矩，觉得没有规矩不成方圆。', reverse: false },
+            // E 外向性 (社交牛逼)
+            { dim: 'E', text: '我能很快和陌生人打成一片，并觉得这件事很有趣。', reverse: false },
+            { dim: 'E', text: '我喜欢在社交平台上分享我的生活，并且渴望得到互动。', reverse: false },
+            { dim: 'E', text: '如果开店，我非常乐意亲自站在前台和顾客聊天、推介产品。', reverse: false },
+            { dim: 'E', text: '过多的社交活动会让我感到精疲力尽，我更喜欢独自待着。', reverse: true },
+            { dim: 'E', text: '遇到难缠的顾客，我也能保持热情并说服他们。', reverse: false },
+            // A 宜人性 (共情包容)
+            { dim: 'A', text: '我很容易察觉到别人的情绪变化，并给予安慰。', reverse: false },
+            { dim: 'A', text: '我开店的话，一定会把顾客的体验感放在第一位。', reverse: false },
+            { dim: 'A', text: '我愿意倾听别人的烦恼，并觉得能帮到别人很有成就感。', reverse: false },
+            { dim: 'A', text: '如果员工或顾客犯了错，我会非常严厉地批评，不留情面。', reverse: true },
+            { dim: 'A', text: '我向往那种充满人情味、温暖治愈的商业氛围。', reverse: false },
+            // R 抗压性 (佛系抗压)
+            { dim: 'R', text: '就算突然遇到水管爆裂、停电等突发事件，我也能冷静处理。', reverse: false },
+            { dim: 'R', text: '哪怕前期亏钱，我也能调整好心态，积极寻找解决办法。', reverse: false },
+            { dim: 'R', text: '面对同行的恶意竞争，我通常能一笑而过，专注做好自己的事。', reverse: false },
+            { dim: 'R', text: '我经常在夜深人静时焦虑到失眠，担心事情做不好。', reverse: true },
+            { dim: 'R', text: '我相信“车到山前必有路”，很少为了还没发生的事情内耗。', reverse: false }
+        ];
+
+        const optionsText = ["非常符合", "比较符合", "一般", "比较不符合", "非常不符合"];
+        
+        let currentQuestionIndex = 0;
+        let scores = { O: 0, C: 0, E: 0, A: 0, R: 0 };
+        // 记录每题答案，用于返回上一题时撤销分数与回显选中
+        let userAnswers = [];
+
+        // 15种结果类型库
+        const results = [
+            { type: "独立精品咖啡店 / 手工陶艺坊", desc: "你是一个兼具浪漫与严谨的“造梦师”。你懂得如何用一杯咖啡或一件手作提供情绪价值，同时你又不会让店面陷入混乱。你的店不需要很大，但一定会成为城市青年逃离喧嚣的“精神自留地”。", match: { O: 20, A: 20, C: 18 } },
+            { type: "街头烤冷面摊 / 社区便利店", desc: "你是实打实的“搞钱务实派”！你不需要那些虚头巴脑的包装，好吃、好用、便宜才是王道。你起早贪黑不怕累，你的店就是街坊邻居离不开的“人间烟火”。", match: { C: 22, A: 18, O: 10 } },
+            { type: "赛博朋克微醺酒馆 / 剧本杀馆", desc: "你绝对是天生的“社牛主理人”和“气氛担当”。你总是能敏锐捕捉到最潮的玩法，你的店里永远不缺欢声笑语。对你来说，开店不仅是赚钱，更是攒局和交友！", match: { E: 22, O: 20, R: 15 } },
+            { type: "个人高端定制品牌店 / 买手店", desc: "你是个有极强个人主见的“冷酷精英”。你不愿迎合大众，你的品味就是店里的金字招牌。你追求高客单价和高质量，比起做“老好人”，你更看重商业的效率和品质。", match: { O: 22, C: 20, A: 10 } },
+            { type: "多抓鱼循环书店 / 独立阅览室", desc: "你内心有着一片宁静的湖泊。你热爱阅读、思考和慢节奏的生活。你的店可能很安静，但绝对是文艺青年们的灵魂栖息地。靠情怀和独特的选品品味来吸引同频的人。", match: { O: 20, A: 18, E: 10 } },
+            { type: "绿植花艺解压馆", desc: "你自带治愈系光环，对美有独特的追求。你渴望与自然打交道，摆弄花草是你最放松的时刻。你的店不仅是卖植物，更是贩卖一种松弛的生活方式和美好心情。", match: { A: 22, O: 18, C: 12 } },
+            { type: "潮玩盲盒快闪店", desc: "你是个追求刺激、时刻走在潮流前线的人。你喜欢新鲜感，愿意为热爱买单。你的店不需要百年老店的沉稳，要的就是“短平快”和爆发力，赚一波就跑超酷的！", match: { O: 22, E: 20, C: 10 } },
+            { type: "宠物洗护咖 / 宠物用品店", desc: "你是个妥妥的“毛孩子奴”，充满爱心和耐心。比起和人打交道，你更愿意服务可爱的小动物。你的店充满了毛茸茸的治愈感，虽然繁琐，但每天都被萌物包围。", match: { A: 22, E: 15, C: 15 } },
+            { type: "高端定制私房烘焙", desc: "你是个极致的细节控，对品质有着近乎偏执的追求。你的产品不需要量产，每一件都要是艺术品。你相信，只要东西足够好，就不缺愿意为高溢价买单的懂行客人。", match: { C: 22, O: 18, A: 12 } },
+            { type: "解压手作陶艺坊 / 银饰DIY", desc: "你是个有耐心、喜欢沉浸在自己世界里的人。你享受把一块泥巴或一根银条变成艺术品的过程。你的店是一个让人远离尘嚣、释放压力的手作空间。", match: { O: 20, A: 20, E: 10 } },
+            { type: "数字游民线上小店 / 无货源电商", desc: "你是个自由灵魂，极度厌恶被实体店的房租和营业时间束缚。你脑子转得快，善于利用互联网工具。一台电脑、一杯咖啡，在哪都能赚钱就是你的终极梦想。", match: { O: 20, C: 15, E: 8 } },
+            { type: "深夜食堂 / 居酒屋", desc: "你是个有故事的同学，深谙人性的冷暖。你的店往往开在深夜，为那些疲惫的都市人提供一碗热汤和倾听的耳朵。你的店不仅是吃饭的地方，更是情感的避风港。", match: { A: 20, R: 20, E: 15 } },
+            { type: "社区杂货铺 / 五金建材店", desc: "你是个踏实肯干、精打细算的人。你不追求花里胡哨，只相信稳稳的幸福。你的店虽然不起眼，但却是社区运转不可或缺的一环，稳扎稳打就是你的致富经。", match: { C: 22, A: 18, O: 8 } },
+            { type: "网红打卡饮品店 / 奶茶店", desc: "你天生对流量和热度敏感，知道现在的年轻人喜欢什么。你的店装修一定要出片，产品包装一定要好看。你擅长营销和造势，每天都在追逐下一个爆款。", match: { E: 20, O: 20, R: 12 } },
+            { type: "极限运动装备店 / 户外露营基地", desc: "你是个充满冒险精神、热爱大自然的人。你觉得生命在于折腾，拒绝无聊。你的店吸引的都是志同道合、喜欢挑战的玩家，赚钱的同时还能玩得爽！", match: { O: 22, R: 20, E: 15 } }
+        ];
+
+        function startTest() {
+            document.getElementById('page-home').classList.remove('active');
+            document.getElementById('page-question').classList.add('active');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('question-text').innerText = `Q${currentQuestionIndex + 1}. ${q.text}`;
+
+            // 更新“上一题”按钮状态与题目计数
+            const prevBtn = document.getElementById('prev-btn');
+            if (currentQuestionIndex === 0) {
+                prevBtn.classList.add('disabled');
+            } else {
+                prevBtn.classList.remove('disabled');
+            }
+            document.getElementById('quiz-count').innerText = `Q${currentQuestionIndex + 1} / ${questions.length}`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            // 回显上一次选择（返回上一题时高亮）
+            const prevAnswer = userAnswers[currentQuestionIndex];
+
+            optionsText.forEach((text, index) => {
+                const scoreValue = 5 - index; // 依次为 5, 4, 3, 2, 1
+                const btn = document.createElement('div');
+                btn.className = 'option-btn';
+                if (prevAnswer && prevAnswer.value === index) {
+                    btn.classList.add('selected');
+                }
+                btn.innerText = text;
+                btn.onclick = () => {
+                    // 即时选中反馈：锁定其他选项并高亮当前项
+                    document.querySelectorAll('.option-btn').forEach(b => {
+                        b.style.pointerEvents = 'none';
+                        b.classList.remove('selecting');
+                    });
+                    btn.classList.add('selecting');
+                    setTimeout(() => selectOption(q, scoreValue, index), 300);
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(question, scoreValue, value) {
+            // 处理反向计分
+            let finalScore = scoreValue;
+            if (question.reverse) {
+                finalScore = 6 - scoreValue;
+            }
+
+            // 如果这题之前答过，先减去旧分数，保证回改后总分正确
+            if (userAnswers[currentQuestionIndex]) {
+                const old = userAnswers[currentQuestionIndex];
+                scores[old.dim] -= old.score;
+            }
+
+            userAnswers[currentQuestionIndex] = { dim: question.dim, score: finalScore, value: value };
+            scores[question.dim] += finalScore;
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                calculateResult();
+            }
+        }
+
+        // 返回上一题：保留该题已选记录用于高亮回显，分数在用户重新选择时自动重算
+        function prevQuestion() {
+            if (currentQuestionIndex === 0) return;
+            currentQuestionIndex--;
+            renderQuestion();
+        }
+
+        function calculateResult() {
+            document.getElementById('page-question').classList.remove('active');
+            document.getElementById('page-result').classList.add('active');
+
+            // 找到最匹配的结果
+            let bestMatch = results[0];
+            let minDistance = Infinity;
+
+            results.forEach(res => {
+                let distance = 0;
+                // 计算当前分数与目标分数的距离
+                for (let key in scores) {
+                    const targetScore = res.match[key] || 15; // 如果未定义，默认中间值15
+                    distance += Math.abs(scores[key] - targetScore);
+                }
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    bestMatch = res;
+                }
+            });
+
+            // 渲染结果文案
+            document.getElementById('result-title').innerText = `🏆 你的天命店铺是：${bestMatch.type}`;
+            document.getElementById('result-desc').innerText = bestMatch.desc;
+
+            // 渲染分析表格
+            const tbody = document.getElementById('analysis-table-body');
+            tbody.innerHTML = '';
+            
+            const dimNames = {
+                O: '奇思妙想度 (创意审美)',
+                C: '细节强迫症 (执行财务)',
+                E: '社交牛逼症 (营销拓展)',
+                A: '共情包容力 (服务体验)',
+                R: '佛系抗压度 (心态定力)'
+            };
+
+            for (let key in scores) {
+                const score = scores[key];
+                const percentage = (score / 25) * 100;
+                
+                let analysis = "";
+                if (percentage >= 80) analysis = "绝对核心优势，建议大搞特搞！";
+                else if (percentage >= 60) analysis = "表现优异，开店必备技能。";
+                else if (percentage >= 40) analysis = "中规中矩，可通过合伙人互补。";
+                else analysis = "相对短板，需寻找专业人士协助。";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="text-align:left; font-size:0.9rem;">${dimNames[key]}</td>
+                    <td><strong>${score}</strong> / 25</td>
+                    <td style="text-align:left;">
+                        <div class="radar-bar-container">
+                            <div class="radar-bar-bg"><div class="radar-bar-fill" style="width: ${percentage}%;"></div></div>
+                        </div>
+                        <div style="font-size:0.8rem; margin-top:5px; color:#666;">${analysis}</div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    </script>
+</body>
+</html>
