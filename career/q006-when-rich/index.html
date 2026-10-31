@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我什么时候发财？ - 趣味心理测试</title>
+    <style>
+        /* 波普艺术 / 公路旅行 / 游戏UI风格 CSS */
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+        :root {
+            --primary-yellow: #FFD000;
+            --primary-orange: #FF5500;
+            --primary-green: #00D278;
+            --primary-blue: #00A2FF;
+            --bg-base: #E5D9B6;
+            --text-dark: #1A1A1A;
+            --text-light: #FFF;
+            --border-thick: 4px solid #1A1A1A;
+            --border-handdrawn: 3px solid #1A1A1A;
+            --shadow-pop: 6px 6px 0px #1A1A1A;
+            --shadow-btn: 4px 4px 0px #1A1A1A;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'ZCOOL KuaiLe', system-ui, -apple-system, sans-serif; 
+            -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle, rgba(0,0,0,0.05) 1.5px, transparent 1.5px),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 85, 0, 0.03) 10px, rgba(255, 85, 0, 0.03) 20px);
+            background-size: 20px 20px, 100% 100%;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* 移动端适配：增加安全内边距 */
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 背景漂浮元素 */
+        .bg-elements {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-item {
+            position: absolute;
+            opacity: 0.15;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(2px 4px 0px rgba(0,0,0,0.2));
+        }
+
+        .bg-item.van { top: 10%; left: 5%; font-size: 120px; animation-delay: 0s; }
+        .bg-item.tent { bottom: 15%; right: 10%; font-size: 100px; animation-delay: 2s; transform: rotate(15deg); }
+        .bg-item.sign { top: 20%; right: 5%; font-size: 90px; animation-delay: 4s; transform: rotate(-10deg); }
+        .bg-item.road { bottom: 5%; left: 2%; font-size: 80px; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            background: #FFF;
+            background-image: linear-gradient(90deg, rgba(200,200,200,0.1) 1px, transparent 1px), linear-gradient(rgba(200,200,200,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: var(--border-thick);
+            border-radius: 15px 5px 15px 5px / 5px 15px 5px 15px;
+            box-shadow: var(--shadow-pop);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            margin: auto; /* 保证居中 */
+        }
+
+        .top-bar {
+            background: var(--primary-yellow);
+            height: 30px;
+            border-bottom: var(--border-thick);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 8px; left: 0;
+            width: 200%; height: 4px;
+            background-image: linear-gradient(to right, var(--text-dark) 50%, transparent 50%);
+            background-size: 30px 100%;
+            animation: drive 2s linear infinite;
+        }
+
+        @keyframes drive {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-30px); }
+        }
+
+        #home-screen, #quiz-screen, #result-screen {
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 主标题自适应 */
+        .title-tag {
+            background: var(--primary-orange);
+            color: var(--text-light);
+            padding: 10px 25px;
+            font-size: clamp(24px, 6vw, 32px); /* 动态字号 */
+            border: var(--border-thick);
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            transform: rotate(-3deg);
+            box-shadow: var(--shadow-pop);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #1A1A1A;
+            position: relative;
+            max-width: 95%; /* 防止溢出 */
+        }
+
+        .title-tag::before {
+            content: '';
+            position: absolute;
+            top: -15px; left: 50%;
+            transform: translateX(-50%) rotate(-5deg);
+            width: 80px; height: 25px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: clamp(14px, 3.5vw, 18px);
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed #999;
+        }
+
+        .btn {
+            background: var(--primary-green);
+            color: var(--text-dark);
+            border: var(--border-thick);
+            border-radius: 10px;
+            padding: 15px 40px;
+            font-size: clamp(18px, 5vw, 24px);
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--shadow-pop);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            max-width: 100%;
+        }
+
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px #1A1A1A;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #666;
+            margin-top: 25px;
+            font-family: sans-serif;
+            background: #FFF;
+            padding: 5px 10px;
+            border: 1px solid #CCC;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 24px;
+            background: #333;
+            border: var(--border-thick);
+            border-radius: 5px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-container::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; width: 100%; height: 2px;
+            background-image: linear-gradient(to right, #FFF 50%, transparent 50%);
+            background-size: 15px 100%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-yellow);
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        .question-card {
+            background: #FFF9E6;
+            border: var(--border-handdrawn);
+            border-radius: 8px 2px 8px 2px;
+            padding: 25px 20px;
+            width: 100%;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(200, 150, 50, 0.1), 4px 4px 0 rgba(0,0,0,0.1);
+            transform: rotate(0.5deg);
+        }
+
+        .question-card::before {
+            content: '📌';
+            position: absolute;
+            top: -15px; left: 15px;
+            font-size: 28px;
+            transform: rotate(15deg);
+            filter: drop-shadow(1px 2px 0 #000);
+        }
+
+        .question-text {
+            font-size: clamp(16px, 4.5vw, 22px);
+            font-weight: bold;
+            line-height: 1.4;
+            color: #2A1D12;
+            word-break: break-word;
+        }
+
+        .options-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #FFF;
+            border: var(--border-thick);
+            padding: 15px 20px;
+            font-size: clamp(15px, 4vw, 18px);
+            font-weight: bold;
+            border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow-btn);
+            position: relative;
+            word-break: break-word;
+        }
+
+        .option-btn:nth-child(even) {
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        }
+
+        .option-btn:hover {
+            background: var(--primary-yellow);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1A1A1A;
+        }
+
+        .option-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1A1A1A;
+        }
+
+        .option-btn::before {
+            content: '⛽';
+            margin-right: 12px;
+            font-size: 18px;
+            color: var(--primary-orange);
+            flex-shrink: 0;
+        }
+
+        /* 点击时的即时选中反馈 */
+        .option-btn.selecting {
+            background: var(--primary-orange) !important;
+            color: #FFF !important;
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1A1A1A;
+        }
+        .option-btn.selecting::before { color: #FFF; }
+
+        /* 返回上一题的高亮回显 */
+        .option-btn.selected {
+            background: #FFF3C4 !important;
+            border: 4px solid var(--primary-orange) !important;
+            box-shadow: 4px 4px 0px #1A1A1A;
+        }
+        .option-btn.selected::after {
+            content: '✔';
+            position: absolute;
+            right: 12px;
+            font-size: 20px;
+            color: var(--primary-orange);
+            font-weight: bold;
+        }
+
+        /* 答题页顶部：上一题 + 计数 */
+        .quiz-top {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .prev-btn {
+            background: var(--primary-yellow);
+            color: var(--text-dark);
+            border: var(--border-handdrawn);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .prev-btn:hover { background: #FFE35C; }
+        .prev-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #1A1A1A; }
+        .prev-btn.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .q-count {
+            background: #FFF;
+            border: var(--border-handdrawn);
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary-orange);
+        }
+
+        .result-title {
+            font-size: clamp(22px, 5.5vw, 26px);
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0 #1A1A1A;
+        }
+
+        .score-display {
+            font-size: clamp(32px, 8vw, 45px);
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #1A1A1A;
+            background: #FFF;
+            padding: 0 20px;
+            border: var(--border-thick);
+            border-radius: 10px;
+            transform: rotate(-2deg);
+        }
+
+        .result-desc {
+            background: var(--primary-yellow);
+            border: var(--border-thick);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-pop);
+            transform: rotate(1deg);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), var(--shadow-pop);
+            word-break: break-word;
+            width: 100%;
+        }
+
+        /* 表格适配重点：防止移动端撑破 */
+        .analysis-table {
+            width: 100%;
+            table-layout: fixed; /* 固定布局 */
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            border: var(--border-thick);
+            background: #FFF;
+            box-shadow: var(--shadow-btn);
+            transform: rotate(-0.5deg);
+        }
+
+        .analysis-table th, .analysis-table td {
+            border: 2px solid #1A1A1A;
+            padding: 10px 5px;
+            text-align: center;
+            font-size: clamp(12px, 3vw, 14px);
+            word-wrap: break-word; /* 允许单词换行 */
+        }
+
+        .analysis-table th {
+            background: var(--primary-blue);
+            color: white;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .analysis-table tr:nth-child(even) {
+            background: #F0F0F0;
+        }
+
+        .analysis-table td {
+            font-weight: bold;
+        }
+
+        .hidden { display: none !important; }
+
+        /* --- 手机端专门适配 --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px; /* 减小边缘留白 */
+            }
+            .bg-item { 
+                opacity: 0.08; /* 弱化背景，防干扰 */
+            }
+            .bg-item.van { font-size: 80px; top: 5%; left: -10px; }
+            .bg-item.tent { font-size: 80px; bottom: 10%; right: -10px; }
+            .bg-item.sign { display: none; } /* 手机端隐藏过多元素 */
+            .bg-item.road { display: none; }
+
+            #home-screen, #quiz-screen, #result-screen {
+                padding: 20px 15px; /* 减小内边距 */
+            }
+            .title-tag {
+                padding: 8px 15px;
+                margin-bottom: 15px;
+            }
+            .question-card {
+                padding: 20px 15px;
+            }
+            .option-btn {
+                padding: 12px 15px;
+            }
+            .option-btn::before {
+                margin-right: 8px;
+                font-size: 16px;
+            }
+            .result-desc {
+                padding: 15px;
+            }
+            .analysis-table th, .analysis-table td {
+                padding: 8px 2px; /* 压缩表格内边距 */
+            }
+        }
+
+        /* 小屏手机：触摸区加大、紧凑布局 */
+        @media (max-width: 480px) {
+            #home-screen, #quiz-screen, #result-screen {
+                padding: 15px 12px;
+            }
+            .option-btn {
+                padding: 13px 14px;
+                min-height: 48px;
+                font-size: 15px;
+            }
+            .prev-btn { padding: 4px 9px; font-size: 12px; }
+            .q-count { font-size: 12px; padding: 2px 7px; }
+            .progress-container { height: 20px; margin-bottom: 20px; }
+            .question-card { padding: 18px 12px; margin-bottom: 18px; }
+            .analysis-table th, .analysis-table td { font-size: 11px; padding: 7px 2px; }
+            .result-desc { padding: 12px; font-size: 14px; }
+            .btn { padding: 13px 30px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 背景装饰元素 -->
+<div class="bg-elements">
+    <div class="bg-item van">🚐</div>
+    <div class="bg-item tent">⛺</div>
+    <div class="bg-item sign">🛣️</div>
+    <div class="bg-item road">🗺️</div>
+</div>
+
+<div class="app-container">
+    <div class="top-bar">📍 ROAD TO WEALTH</div>
+
+    <!-- 首页 -->
+    <div id="home-screen">
+        <div class="title-tag">我什么时候发财？</div>
+        <p class="subtitle">测一测你的“暴富基因”到底有多强！<br>专治各种打工不爽、搞钱迷茫。</p>
+        <button class="btn" onclick="startQuiz()">现在出发 🚗</button>
+        <p class="disclaimer">*本测试结果仅供参考，发财还需脚踏实地。</p>
+    </div>
+
+    <!-- 答题页 -->
+    <div id="quiz-screen" class="hidden">
+        <div class="quiz-top">
+            <button id="prev-btn" class="prev-btn disabled" onclick="prevQuestion()">＜ 上一题</button>
+            <span class="q-count" id="q-count">1 / 20</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-text" id="question-text">题目内容加载中...</div>
+        </div>
+
+        <div class="options-container" id="options-container">
+            <!-- 选项按钮由JS生成 -->
+        </div>
+    </div>
+
+    <!-- 结果页 -->
+    <div id="result-screen" class="hidden">
+        <div class="title-tag" style="background: var(--primary-blue);">到达目的地</div>
+        <div class="score-display" id="final-score">0分</div>
+        <div class="result-title" id="result-title-text">称号</div>
+        <div class="result-desc" id="result-desc-text">解读文案...</div>
+        
+        <!-- 维度分析表格 -->
+        <h3 style="width: 100%; text-align: left; margin-bottom: 10px; color: #FFF; text-shadow: 1px 1px 0 #000; font-size: clamp(16px, 4vw, 20px);">📊 财富维度雷达</h3>
+        <table class="analysis-table">
+            <thead>
+                <tr>
+                    <th width="30%">维度</th>
+                    <th width="30%">得分</th>
+                    <th width="40%">官方吐槽</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- 表格内容由JS生成 -->
+            </tbody>
+        </table>
+
+        <button class="btn" onclick="location.reload()" style="background: var(--primary-yellow);">重新发车 🔄</button>
+    </div>
+</div>
+
+<script>
+    // 题库数据
+    const questions = [
+        { id: 1, text: "我经常幻想自己实现财富自由后，立马把辞职信甩老板桌上。", dim: "搞钱野心", reverse: false },
+        { id: 2, text: "看到有风险但收益很高的搞钱机会，我愿意拿闲钱去试一试。", dim: "搞钱野心", reverse: false },
+        { id: 3, text: "我只想安安稳稳拿死工资，对赚大钱没有太强烈的欲望。", dim: "搞钱野心", reverse: true },
+        { id: 4, text: "我经常关注各类财经、副业和搞钱的信息。", dim: "搞钱野心", reverse: false },
+        { id: 5, text: "如果有一个能翻倍赚钱的机会，我会毫不犹豫地心动。", dim: "搞钱野心", reverse: false },
+        
+        { id: 6, text: "面对工作或副业，我会制定详细的计划并严格按计划执行。", dim: "牛马执行力", reverse: false },
+        { id: 7, text: "为了提升自己的赚钱能力，我平时会主动学习新技能。", dim: "牛马执行力", reverse: false },
+        { id: 8, text: "我的搞钱计划往往只停留在“想一想”和“收藏吃灰”的阶段。", dim: "牛马执行力", reverse: true },
+        { id: 9, text: "只要认准了一个能搞钱的项目，再苦再累我也能坚持下来。", dim: "牛马执行力", reverse: false },
+        { id: 10, text: "即使没有人监督，我也能高效完成今天该做的事。", dim: "牛马执行力", reverse: false },
+
+        { id: 11, text: "在陌生社交场合，我能很快破冰并认识对我有帮助的人。", dim: "致富社交力", reverse: false },
+        { id: 12, text: "我擅长向上管理，能跟领导和行业大佬建立良好的关系。", dim: "致富社交力", reverse: false },
+        { id: 13, text: "遇到搞钱路上的困难，我宁愿自己死磕，也不好意思向别人请教。", dim: "致富社交力", reverse: true },
+        { id: 14, text: "我经常能从朋友或同事那里获知第一手的赚钱小道消息。", dim: "致富社交力", reverse: false },
+        { id: 15, text: "在团队合作中，我能轻易调动他人的积极性一起把事办成。", dim: "致富社交力", reverse: false },
+
+        { id: 16, text: "即使目前的工作让我很痛苦，只要钱给够，我就能忍受。", dim: "暴富心态", reverse: false },
+        { id: 17, text: "被老板或客户气到发疯时，我会在心里告诉自己“这都是为了赎身”。", dim: "暴富心态", reverse: false },
+        { id: 18, text: "如果一次投资亏了钱，或者副业失败了，我会郁闷很久并彻底放弃。", dim: "暴富心态", reverse: true },
+        { id: 19, text: "我能够为了未来五年内的大目标，严格控制当下不必要的消费。", dim: "暴富心态", reverse: false },
+        { id: 20, text: "我相信即使现在很穷，只要我慢慢积累，未来一定能暴富。", dim: "暴富心态", reverse: false }
+    ];
+
+    const options = [
+        { text: "非常符合", value: 5 },
+        { text: "比较符合", value: 4 },
+        { text: "一般般/说不准", value: 3 },
+        { text: "比较不符合", value: 2 },
+        { text: "非常不符合", value: 1 }
+    ];
+
+    let currentQuestionIndex = 0;
+    let totalScore = 0;
+    let userAnswers = [];
+    let dimensionScores = {
+        "搞钱野心": 0,
+        "牛马执行力": 0,
+        "致富社交力": 0,
+        "暴富心态": 0
+    };
+
+    function startQuiz() {
+        document.getElementById('home-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResult();
+            return;
+        }
+
+        const q = questions[currentQuestionIndex];
+        document.getElementById('question-text').innerText = `Q${currentQuestionIndex + 1}. ${q.text}`;
+        document.getElementById('q-count').innerText = `${currentQuestionIndex + 1} / ${questions.length}`;
+
+        // 更新“上一题”按钮状态
+        const prevBtn = document.getElementById('prev-btn');
+        if (currentQuestionIndex === 0) {
+            prevBtn.classList.add('disabled');
+        } else {
+            prevBtn.classList.remove('disabled');
+        }
+
+        const progress = (currentQuestionIndex / questions.length) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        // 回显上一次选择（返回上一题时高亮）
+        const prevAnswer = userAnswers[currentQuestionIndex];
+
+        options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            if (prevAnswer && prevAnswer.value === index) {
+                btn.classList.add('selected');
+            }
+            btn.innerText = opt.text;
+            btn.onclick = () => selectOption(opt.value, index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(value, index, element) {
+        const q = questions[currentQuestionIndex];
+
+        // 返回上一题改选时：先撤销旧分，再计新分
+        const old = userAnswers[currentQuestionIndex];
+        if (old) {
+            totalScore -= old.score;
+            dimensionScores[old.dim] -= old.score;
+        }
+
+        // 锁定其他选项，并给当前项明显的选中反馈
+        document.querySelectorAll('.option-btn').forEach(b => {
+            b.style.pointerEvents = 'none';
+            b.classList.remove('selecting');
+        });
+        element.classList.add('selecting');
+
+        // 记录新答案（按下标存：改选自动覆盖）
+        let scoreToAdd = q.reverse ? (6 - value) : value;
+        userAnswers[currentQuestionIndex] = { dim: q.dim, score: scoreToAdd, value: index };
+        totalScore += scoreToAdd;
+        dimensionScores[q.dim] += scoreToAdd;
+
+        currentQuestionIndex++;
+        loadQuestion();
+    }
+
+    // 返回上一题：保留该题已选记录用于高亮回显，改选会撤销旧分并按新选择重算
+    function prevQuestion() {
+        if (currentQuestionIndex === 0) return;
+        currentQuestionIndex--;
+        loadQuestion();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+
+        document.getElementById('final-score').innerText = `${totalScore} 分`;
+        
+        let title = "";
+        let desc = "";
+
+        if (totalScore <= 40) {
+            title = "躺平任嘲佛系牛马";
+            desc = "💰 发财预测：下辈子/梦里啥都有<br><br>别人在卷，你在躺；别人在搞钱，你在搞薯条。你深谙“只要我不努力，老板就过不上他想要的生活”的真理。你的财富密码不掌握在自己手里，而掌握在“彩票站”和“网文小说”里。不过你的心态极佳，毕竟钱没了可以再赚，开心没了，那就是真没了。";
+        } else if (totalScore <= 65) {
+            title = "疯狂试探的觉醒打工人";
+            desc = "💰 发财预测：35岁危机前后，开启副业暴富<br><br>曾经的你以为“乾坤未定，你我皆是黑马”，现在的你发现“乾坤已定，你我皆是牛马”。你已经觉醒了搞钱血脉，每天都在各大平台搜索“冷门暴利项目”。执行力稍微差了一点点，容易被“买一送一”的奶茶消耗掉意志。只要少看几次带货直播，多落实几个PPT，你的第一桶金马上就到！";
+        } else if (totalScore <= 85) {
+            title = "天选潜力搞钱特种兵";
+            desc = "💰 发财预测：3-5年内，实现车厘子自由<br><br>你是一个清醒的打工狠人！你知道所谓的“窝囊费”只是原始资本积累的过程。你不仅情商高，能在大佬圈子里左右逢源，还能在深夜里默默打磨自己的核心技能。你情绪稳定，执行力爆表，简直就是资本家的噩梦、创业者的偶像。你的发财只是时间问题，搞不到大钱也能捞到中产。";
+        } else {
+            title = "行走的印钞机预备役";
+            desc = "💰 发财预测：立刻！马上！出门去买张刮刮乐！<br><br>华尔街之狼见了你都要递根烟，巴菲特看了你的心性都要夸你情绪稳定。你不仅极度渴望财富，而且有极强的风险承受能力、超强的执行力和极其敏锐的社交嗅觉。你根本不需要“求财”，财神爷已经在你家门口排队了。建议立刻去搞事业，下一个千万富翁就是你！";
+        }
+
+        document.getElementById('result-title-text').innerText = title;
+        document.getElementById('result-desc-text').innerHTML = desc;
+
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
+        
+        for (const [dim, score] of Object.entries(dimensionScores)) {
+            let comment = "";
+            let maxScore = 25; 
+            let percentage = (score / maxScore) * 100;
+
+            if (percentage >= 80) comment = "登峰造极，强得可怕";
+            else if (percentage >= 60) comment = "表现优异，继续冲鸭";
+            else if (percentage >= 40) comment = "中规中矩，有待加强";
+            else comment = "急需补课，建议躺平";
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="color: var(--primary-blue);">${dim}</td>
+                <td>${score}/25</td>
+                <td style="color:var(--primary-orange)">${comment}</td>
+            `;
+            tableBody.appendChild(tr);
+        }
+    }
+</script>
+</body>
+</html>
