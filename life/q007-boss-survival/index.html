@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>作为黑帮老大的你，能在末世活过几天？</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+
+        :root {
+            --bg-dark: #08080a;
+            --bg-panel: rgba(18, 18, 22, 0.88); /* 半透明磨砂面板 */
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --accent-red: #a31119;
+            --accent-red-bright: #e6232b;
+            --border-color: #2a2a30;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Oswald', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            /* 多层背景叠加：暗红光晕 + 战术网格 + 噪点 */
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(163, 17, 25, 0.15) 0%, transparent 60%),
+                linear-gradient(rgba(163, 17, 25, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(163, 17, 25, 0.04) 1px, transparent 1px),
+                url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.06"/></svg>');
+            background-size: 100% 100%, 40px 40px, 40px 40px, auto;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(163, 17, 25, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 顶部和底部的高亮血线装饰 */
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-red-bright), transparent);
+            z-index: 10;
+        }
+        .container::before { top: 0; }
+        .container::after { bottom: 0; }
+
+        .header {
+            padding: 45px 20px 35px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            background: radial-gradient(circle at top, rgba(230, 35, 43, 0.1) 0%, transparent 70%);
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--accent-red-bright);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.9), 0 0 30px rgba(230, 35, 43, 0.6);
+            margin-bottom: 12px;
+            transform: skewX(-10deg);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            color: var(--text-main);
+            font-size: 1.15rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            line-height: 1.4;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        #start-screen {
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .rules {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: left;
+            border-left: 3px solid var(--accent-red);
+            padding: 20px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: rgba(163, 17, 25, 0.1);
+            color: var(--text-main);
+            border: 1px solid var(--accent-red);
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .btn:hover, .btn:active {
+            background: var(--accent-red);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(230, 35, 43, 0.5);
+        }
+
+        #quiz-screen { display: none; }
+
+        .question-block {
+            margin-bottom: 25px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            color: #eee;
+        }
+
+        .question-num {
+            color: var(--accent-red-bright);
+            font-weight: bold;
+            margin-right: 8px;
+            font-family: monospace;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 2px;
+            -webkit-tap-highlight-color: transparent; /* 去除手机端点击高亮 */
+        }
+
+        .option-label:hover, .option-label:active {
+            border-color: var(--accent-red);
+            background: rgba(163, 17, 25, 0.15);
+        }
+
+        .option-label input[type="radio"] { display: none; }
+
+        .radio-custom {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #555;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            flex-shrink: 0;
+            background: #111;
+        }
+
+        .option-label input[type="radio"]:checked + .radio-custom {
+            border-color: var(--accent-red-bright);
+            background: var(--accent-red);
+            box-shadow: 0 0 10px var(--accent-red-bright);
+        }
+        
+        .option-label input[type="radio"]:checked ~ span {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        #result-screen {
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            color: var(--accent-red-bright);
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(230, 35, 43, 0.4);
+        }
+
+        .result-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            color: #ccc;
+            border: 1px solid #222;
+            border-left: 3px solid var(--accent-red);
+            word-break: break-all;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.3);
+            table-layout: fixed; /* 保证手机端表格不乱 */
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a30;
+            word-wrap: break-word;
+        }
+
+        th {
+            color: #888;
+            font-weight: normal;
+            text-transform: uppercase;
+            width: 33%;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .score-highlight {
+            color: var(--accent-red-bright);
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 移动端深度适配 */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                align-items: flex-start; /* 让内容过长时从顶部开始滚动 */
+            }
+            .header {
+                padding: 30px 15px 25px;
+            }
+            .logo { 
+                font-size: 2.2rem; 
+                letter-spacing: 3px;
+            }
+            .subtitle { 
+                font-size: 0.95rem; 
+                letter-spacing: 1px;
+            }
+            .content { 
+                padding: 20px 12px; 
+            }
+            .rules {
+                padding: 14px;
+                font-size: 0.85rem;
+                margin-bottom: 24px;
+            }
+            .question-block {
+                margin-bottom: 16px;
+                padding-bottom: 14px;
+            }
+            .question-text { 
+                font-size: 0.95rem; 
+                line-height: 1.5;
+            }
+            .option-label {
+                padding: 10px 14px;
+                min-height: 46px; /* 保证触摸区 */
+                line-height: 1.4;
+            }
+            .option-label span {
+                font-size: 0.9rem;
+            }
+            .radio-custom {
+                width: 18px;
+                height: 18px;
+                margin-right: 10px;
+            }
+            .result-title { 
+                font-size: 1.5rem; 
+            }
+            .result-desc {
+                padding: 15px;
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+            th, td { 
+                padding: 10px 4px; 
+                font-size: 0.78rem; 
+            }
+            .btn { 
+                padding: 13px 20px; 
+                font-size: 0.95rem;
+                width: 100%; /* 移动端按钮全宽 */
+                letter-spacing: 1px;
+            }
+            .disclaimer {
+                margin-top: 16px;
+            }
+        }
+
+        /* 小屏手机深度适配 */
+        @media (max-width: 480px) {
+            .header { padding: 24px 12px 20px; }
+            .logo { font-size: 1.9rem; letter-spacing: 2px; }
+            .subtitle { font-size: 0.88rem; }
+            .content { padding: 16px 10px; }
+            .question-text { font-size: 0.9rem; }
+            .option-label { padding: 9px 12px; min-height: 44px; }
+            .option-label span { font-size: 0.85rem; }
+            .question-num { margin-right: 6px; }
+            .result-title { font-size: 1.3rem; }
+            .result-desc { padding: 12px; font-size: 0.85rem; }
+            th, td { padding: 8px 3px; font-size: 0.72rem; }
+            .btn { font-size: 0.9rem; padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">BEASTERS</div>
+        <div class="subtitle">作为黑帮老大的你，能在末世活过几天？</div>
+    </div>
+
+    <div class="content">
+        <!-- 开始界面 -->
+        <div id="start-screen">
+            <div class="rules">
+                <p>▪ 欢迎来到秩序崩坏的重建区。</p>
+                <p>▪ 在这里，规则由拳头和子弹书写。</p>
+                <p>▪ 请根据你的直觉，选择最符合你行为逻辑的选项（共25题）。</p>
+            </div>
+            <button class="btn" onclick="startQuiz()">CLICK TO ENTER</button>
+            <div class="disclaimer">* 结果仅供参考，本测试为架空娱乐向，请勿代入现实。</div>
+        </div>
+
+        <!-- 题目界面 -->
+        <div id="quiz-screen">
+            <form id="quiz-form"></form>
+            <button class="btn" style="width:100%; margin-top: 20px;" onclick="calculateResult()">SUBMIT ANSWERS</button>
+        </div>
+
+        <!-- 结果界面 -->
+        <div id="result-screen">
+            <div class="result-title" id="res-title">生存结果</div>
+            <div class="result-desc" id="res-desc"></div>
+            
+            <h3 style="color: #fff; margin-bottom: 10px; border-bottom: 1px solid var(--accent-red); padding-bottom: 5px; font-size: 1.05rem;">能力维度分析</h3>
+            <table id="res-table">
+                <thead>
+                    <tr>
+                        <th>维度</th>
+                        <th>得分</th>
+                        <th>评估</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="disclaimer" style="text-align: center; margin-top: 20px;">* 结果仅供参考</div>
+            <button class="btn" style="width:100%; margin-top: 20px;" onclick="location.reload()">RESTART</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 题库数据
+    const questions = [
+        { text: "对于出卖过你的手下，你通常会选择让他在痛苦中消失，而不是简单地给他一枪。", reverse: false, dim: "狠辣度" },
+        { text: "看到路边无家可归的弱者，你偶尔会心软，给他们一点食物。", reverse: true, dim: "狠辣度" },
+        { text: "为了大局（比如保全组织或获取重要资源），你可以毫不犹豫地牺牲几个无关紧要的人。", reverse: false, dim: "狠辣度" },
+        { text: "你觉得在混乱的世界里，感情是一种拖累，随时可以抛弃。", reverse: false, dim: "狠辣度" },
+        { text: "即使曾经的恩人挡了你的路，你也能毫不犹豫地痛下杀手。", reverse: false, dim: "狠辣度" },
+        
+        { text: "哪怕你手无寸铁，你也能用眼神和气势镇住场面。", reverse: false, dim: "威压感" },
+        { text: "当手下对你有异议时，你习惯用绝对的权威去压制，而不是讲道理。", reverse: false, dim: "威压感" },
+        { text: "在人群中，你更喜欢保持低调，让手下人去出风头。", reverse: true, dim: "威压感" },
+        { text: "你的手下对你既敬畏又害怕，很少有人敢直视你的眼睛。", reverse: false, dim: "威压感" },
+        { text: "在谈判桌上，你经常通过提高音量或强势的肢体语言来占据主动权。", reverse: false, dim: "威压感" },
+        
+        { text: "当据点突然被不明武装包围时，你第一反应是冷静安排撤退路线和火力点。", reverse: false, dim: "冷静值" },
+        { text: "即使被人用枪指着脑袋，你依然能保持微笑并寻找反击的机会。", reverse: false, dim: "冷静值" },
+        { text: "面对资金链断裂或地盘被抢的重大危机，你常常会焦虑到失眠。", reverse: true, dim: "冷静值" },
+        { text: "你很少在手下面前表露你的愤怒或恐惧，总是显得胸有成竹。", reverse: false, dim: "冷静值" },
+        { text: "情绪失控时，你偶尔会做出一些事后后悔的冲动决定。", reverse: true, dim: "冷静值" },
+        
+        { text: "你经常能一眼看穿别人设下的圈套或骗局。", reverse: false, dim: "战术脑" },
+        { text: "遇到实力远强于你的对手，你更喜欢用计谋和陷阱来取胜，而不是硬拼。", reverse: false, dim: "战术脑" },
+        { text: "比起动脑子，你更相信手里的武器和拳头。", reverse: true, dim: "战术脑" },
+        { text: "你擅长整合各种看似无用的资源，创造出新的生财之道或战斗策略。", reverse: false, dim: "战术脑" },
+        { text: "你会在行动前制定详细的计划，并设想多种突发情况的对策。", reverse: false, dim: "战术脑" },
+        
+        { text: "你的安全屋里永远备有至少三条逃生路线和充足的物资。", reverse: false, dim: "生存欲" },
+        { text: "每次出门“干活”前，你会仔细检查装备并提醒手下保持警惕。", reverse: false, dim: "生存欲" },
+        { text: "你信奉“今朝有酒今朝醉”，很少为明天的生计做长远打算。", reverse: true, dim: "生存欲" },
+        { text: "你对各种稀缺物资的黑市价格和交易渠道了如指掌。", reverse: false, dim: "生存欲" },
+        { text: "即使在睡觉时，你也会在枕头下放一把上膛的武器。", reverse: false, dim: "生存欲" }
+    ];
+
+    // 选项顺序：非常符合 -> 完全不符合
+    const optionsText = ["非常符合", "比较符合", "一般", "比较不符合", "完全不符合"];
+    // 对应的分值：非常符合=5分，完全不符合=1分
+    const optionValues = [5, 4, 3, 2, 1]; 
+    
+    let dimensionScores = { "狠辣度": 0, "威压感": 0, "冷静值": 0, "战术脑": 0, "生存欲": 0 };
+
+    function renderQuiz() {
+        const form = document.getElementById('quiz-form');
+        form.innerHTML = questions.map((q, index) => {
+            // 渲染选项，绑定对应的分值
+            const optionsHtml = optionsText.map((opt, i) => `
+                <label class="option-label">
+                    <input type="radio" name="q${index}" value="${optionValues[i]}" required>
+                    <div class="radio-custom"></div>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+            
+            return `
+                <div class="question-block">
+                    <div class="question-text">
+                        <span class="question-num">Q${index + 1}</span>${q.text}
+                    </div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        renderQuiz();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function calculateResult() {
+        const form = document.getElementById('quiz-form');
+        let totalScore = 0;
+        let isComplete = true;
+        
+        // 重置维度得分
+        for (let key in dimensionScores) { dimensionScores[key] = 0; }
+
+        for (let i = 0; i < questions.length; i++) {
+            const selected = form.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                isComplete = false;
+                alert(`请完成第 ${i + 1} 题！`);
+                // 定位到未答题目
+                document.getElementsByClassName('question-block')[i].scrollIntoView({behavior: 'smooth', block: 'center'});
+                break;
+            }
+            
+            // 直接获取绑定的分值 (5 到 1)
+            let value = parseInt(selected.value);
+            const q = questions[i];
+            
+            // 如果是反向计分题，则用6减去原始分值
+            if (q.reverse) {
+                value = 6 - value;
+            }
+            
+            totalScore += value;
+            dimensionScores[q.dim] += value;
+        }
+
+        if (isComplete) {
+            showResult(totalScore);
+        }
+    }
+
+    function showResult(score) {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        let title, desc;
+        if (score <= 55) {
+            title = "【边缘小透明】";
+            desc = "你以为你是去当幕后大佬，实际上你是去给大佬端茶递水的。在弱肉强食的圈子里，你的善良和天真就是敌人最喜欢的突破口。存活时间：<1天。建议重开。";
+        } else if (score <= 80) {
+            title = "【头铁炮灰】";
+            desc = "你的字典里没有‘后退’，只有‘正面刚’。虽然你能靠一身莽劲收几个小弟，但在那些老狐狸眼里，你只是一把好用的刀。存活时间：约3天。死因多为被群殴。";
+        } else if (score <= 105) {
+            title = "【腹黑操盘手】";
+            desc = "混乱世界的生存大师。你既有锋利的爪牙，又有狡猾的头脑。你能在各大势力间游刃有余，但高处不胜寒，小心你最信任的副手。存活时间：3个月以上。";
+        } else {
+            title = "【无冕之王】";
+            desc = "你是规则的制定者。在你的眼里，这个混乱的世界不过是你的游乐场，所有人都只是你棋盘上的棋子。存活时间：只要你不主动毁灭世界，就能一直活下去。";
+        }
+
+        document.getElementById('res-title').innerText = title;
+        document.getElementById('res-desc').innerText = desc;
+
+        const tbody = document.querySelector('#res-table tbody');
+        tbody.innerHTML = '';
+        
+        for (let dim in dimensionScores) {
+            const dimScore = dimensionScores[dim];
+            let evalText = "";
+            if (dimScore >= 21) evalText = "极度危险";
+            else if (dimScore >= 15) evalText = "出类拔萃";
+            else if (dimScore >= 10) evalText = "中规中矩";
+            else evalText = "致命短板";
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${dim}</td>
+                    <td class="score-highlight">${dimScore} / 25</td>
+                    <td>${evalText}</td>
+                </tr>
+            `;
+        }
+    }
+</script>
+</body>
+</html>
