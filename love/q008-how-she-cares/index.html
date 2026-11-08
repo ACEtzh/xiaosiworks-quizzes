@@ -468,15 +468,15 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
       </button>
     </div>
     <div class="scroll">
-      <div class="kicker">可选 · 随便填</div>
-      <h2 class="page-title">先说说这段关系</h2>
-      <p class="set-note">这几项只用来让结果解释更贴近你的处境，<strong>不参与计分</strong>。不想填的，全部空着也行。</p>
+      <div class="kicker">背景信息（选填）</div>
+      <h2 class="page-title">当前关系状态</h2>
+      <p class="set-note">以下信息仅用于辅助生成更精准的解读报告，<strong>不参与核心计分</strong>，您可以选择跳过。</p>
 
       <div class="group">
-        <div class="group-label">现在的关系阶段<i>单选</i></div>
+        <div class="group-label">目前的关系阶段<i>单选</i></div>
         <div class="chips" data-group="stage">
-          <button class="chip" data-val="暧昧" aria-pressed="false">暧昧</button>
-          <button class="chip" data-val="约会中" aria-pressed="false">约会中</button>
+          <button class="chip" data-val="暧昧/未确立" aria-pressed="false">暧昧/未确立</button>
+          <button class="chip" data-val="初期交往" aria-pressed="false">初期交往</button>
           <button class="chip" data-val="稳定伴侣" aria-pressed="false">稳定伴侣</button>
           <button class="chip" data-val="复合观察" aria-pressed="false">复合观察</button>
           <button class="chip" data-val="不确定" aria-pressed="false">不确定</button>
@@ -484,25 +484,25 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
       </div>
 
       <div class="group">
-        <div class="group-label">认识多久了<i>单选</i></div>
+        <div class="group-label">当前状态维持多久<i>单选</i></div>
         <div class="chips" data-group="duration">
-          <button class="chip" data-val="1个月内" aria-pressed="false">1 个月内</button>
-          <button class="chip" data-val="1-6个月" aria-pressed="false">1–6 个月</button>
-          <button class="chip" data-val="6个月-2年" aria-pressed="false">6 个月–2 年</button>
-          <button class="chip" data-val="2年以上" aria-pressed="false">2 年以上</button>
+          <button class="chip" data-val="1个月内" aria-pressed="false">1个月内</button>
+          <button class="chip" data-val="1-6个月" aria-pressed="false">1-6个月</button>
+          <button class="chip" data-val="6个月-2年" aria-pressed="false">6个月-2年</button>
+          <button class="chip" data-val="2年以上" aria-pressed="false">2年以上</button>
         </div>
       </div>
 
       <div class="group">
-        <div class="group-label">你们的距离<i>单选</i></div>
+        <div class="group-label">日常相处距离<i>单选</i></div>
         <div class="chips" data-group="distance">
-          <button class="chip" data-val="同城" aria-pressed="false">同城</button>
+          <button class="chip" data-val="同城分居" aria-pressed="false">同城分居</button>
           <button class="chip" data-val="异地" aria-pressed="false">异地</button>
           <button class="chip" data-val="同居" aria-pressed="false">同居</button>
         </div>
       </div>
 
-      <p class="fine">再点一次可以取消选择。</p>
+      <p class="fine">（再点一次可取消选择）</p>
     </div>
     <div class="dock">
       <div class="dock-row">
@@ -886,7 +886,7 @@ const REMIND = {
   strong:'您在这段关系中获得了较高的确定感与支持感。稳定关系亦有起伏，建议避免因偶发的冷淡而全盘否定关系；同时，需保持自我边界的觉察，避免因对方一贯良好而压抑自身的合理需求。'
 };
 const STAGE_NOTE = {
-  '暧昧':'此阶段的互动本身具有较高的不确定性，分数偏低受阶段特性影响较大。重点在于评估对方提供的互动模式，是否符合您对亲密关系的预期。',
+  '暧昧/未确立':'此阶段的互动本身具有较高的不确定性，分数偏低受阶段特性影响较大。重点在于评估对方提供的互动模式，是否符合您对亲密关系的预期。',
   '复合观察':'「一致性稳定」维度的得分偏低属常见现象。允许其处于低位，但需重点观察其后续是否存在持续回升的趋势。',
   '异地':'物理距离会客观稀释日常陪伴感。需区分「实际投入」偏低是受限于客观距离，还是主观意愿不足。',
   '不确定':'由于关系状态本身模糊，作答可能存在偏差。建议将此结果视作一次阶段性的自我核对，无需将其视为最终结论。'
