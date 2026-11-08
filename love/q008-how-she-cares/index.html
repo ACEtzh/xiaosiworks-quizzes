@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBF6F0">
+<meta name="description" content="《她对你的关心程度》：25 题关系感知型心理测试，匿名，全部在本地计算。">
+<title>亲密关系关怀感知评估</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23FBF6F0'/%3E%3Ccircle cx='16' cy='16' r='3.2' fill='%23B98A86'/%3E%3Cpath d='M22 9.5a9 9 0 0 1 0 13' stroke='%23D8B3AF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M10 9.5a9 9 0 0 0 0 13' stroke='%23D8B3AF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#FBF6F0;
+  --paper-deep:#F6EEE5;
+  --card:#FFFCF8;
+  --ink:#473F3B;
+  --ink-2:#7B6F69;
+  --ink-3:#9A8D86;
+  --rose:#B98A86;
+  --rose-deep:#A3746F;
+  --rose-2:#D8B3AF;
+  --rose-tint:#F8EDEA;
+  --blue:#93A9B4;
+  --blue-tint:#EAF0F2;
+  --line:#E7DBD1;
+  --line-2:#D9CBC0;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC","SimSun",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --r-card:26px;
+  --dockh:92px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(120% 55% at 50% -10%, #FFFDF9 0%, rgba(255,253,249,0) 60%),
+    radial-gradient(90% 45% at 50% 108%, #F7EEE4 0%, rgba(247,238,228,0) 65%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:140px 140px;
+}
+.app{position:relative;z-index:1;max-width:430px;margin:0 auto;min-height:100dvh}
+.view{display:none}
+.view.is-on{display:block;animation:rise .42s cubic-bezier(.22,.61,.36,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .view.is-on{animation:none}
+  *{transition-duration:.01ms!important}
+}
+
+/* ---------- 通用元件 ---------- */
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:.04em;margin:0}
+p{margin:0}
+.btn{
+  display:flex;align-items:center;justify-content:center;width:100%;
+  min-height:54px;padding:0 24px;border:none;border-radius:999px;
+  font-family:var(--sans);font-size:16.5px;letter-spacing:.06em;
+  transition:transform .18s ease,background-color .22s ease,opacity .22s ease,box-shadow .22s ease;
+  cursor:pointer;
+}
+.btn.primary{background:var(--rose);color:#FFF8F4;box-shadow:0 10px 24px -16px rgba(140,95,90,.85)}
+.btn.primary:active{transform:scale(.978);background:var(--rose-deep)}
+.btn.primary[disabled]{background:#E8D9D4;color:#A99690;box-shadow:none;cursor:default;transform:none}
+.btn.soft{background:transparent;color:var(--ink-2);border:1px solid var(--line-2);font-size:15px;min-height:50px}
+.btn.soft:active{transform:scale(.978);background:#F7EFE7}
+.linkish{
+  background:none;border:none;padding:6px 2px;font-family:var(--sans);
+  font-size:14.5px;color:var(--ink-3);text-decoration:underline;
+  text-decoration-color:var(--line-2);text-underline-offset:4px;cursor:pointer;
+}
+.hair{height:1px;background:var(--line);border:0;margin:0}
+.lockline{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;color:var(--ink-3);letter-spacing:.02em;line-height:1.6}
+.lockline svg{width:14px;height:14px;flex:none;opacity:.8}
+.page{display:flex;flex-direction:column;min-height:100dvh}
+.scroll{flex:1;overflow-y:auto;padding:34px 26px calc(var(--dockh) + 26px)}
+.dock{
+  position:sticky;bottom:0;z-index:5;
+  padding:14px 26px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(251,246,240,0) 0%,rgba(251,246,240,.86) 22%,var(--paper) 58%);
+}
+.dock-row{display:flex;gap:10px;align-items:center}
+.topbar{display:flex;align-items:center;gap:10px;padding:14px 20px 0;min-height:52px}
+.iconbtn{
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;border-radius:50%;cursor:pointer;color:var(--ink-3);
+}
+.iconbtn:active{background:#F3E9DF}
+.iconbtn svg{width:19px;height:19px}
+
+/* ---------- 封面 ---------- */
+.cover{
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:100dvh;padding:calc(56px + env(safe-area-inset-top)) 30px calc(26px + env(safe-area-inset-bottom));
+}
+.cover-mark{display:flex;justify-content:center}
+.sigil{width:104px;height:104px;display:block}
+.sigil .dot{stroke:var(--rose);fill:none;stroke-width:2.6}
+.sigil .near{stroke:var(--rose-2);stroke-width:2.4;fill:none}
+.sigil .far{stroke:var(--line-2);stroke-width:2;fill:none}
+.cover-copy{margin-top:6px}
+.cover-copy h1{
+  font-size:clamp(34px,9.6vw,42px);
+  line-height:1.38;
+  letter-spacing:.08em;
+  color:#3F3733;
+}
+.cover-copy h1 em{font-style:normal;color:var(--rose-deep)}
+.cover-sub{
+  margin-top:22px;font-size:15.5px;line-height:1.85;color:var(--ink-2);
+  max-width:19em;
+}
+.cover-meta{margin-top:30px;display:flex;flex-direction:column;gap:10px}
+.cover-tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{
+  font-size:13.5px;line-height:1;padding:8px 13px;border-radius:999px;
+  background:#F5EBE3;color:#8A7A71;letter-spacing:.03em;
+}
+.cover-foot{margin-top:26px}
+.cover-dots{display:flex;gap:6px;align-items:center;margin-top:18px}
+.cover-dots i{width:5px;height:5px;border-radius:50%;background:var(--line-2)}
+.cover-dots i:first-child{background:var(--rose-2)}
+
+/* ---------- 知情同意 ---------- */
+.kicker{font-size:14px;color:var(--rose-deep);letter-spacing:.1em}
+.page-title{font-size:25px;line-height:1.5;margin-top:10px;color:#3F3733}
+.lead{margin-top:14px;font-size:15.5px;color:var(--ink-2);line-height:1.85}
+.blocks{margin-top:28px;display:flex;flex-direction:column;gap:22px}
+.block h3{font-size:17px;font-family:var(--sans);font-weight:600;letter-spacing:.02em;color:#4A423E}
+.block h3 span{color:var(--rose);font-size:13px;margin-right:8px;font-family:var(--sans)}
+.block p{margin-top:8px;font-size:15.5px;line-height:1.85;color:var(--ink-2)}
+.consent-check{
+  margin-top:30px;display:flex;align-items:flex-start;gap:12px;
+  padding:16px 16px;border:1px solid var(--line);border-radius:18px;background:var(--card);
+  cursor:pointer;min-height:56px;
+}
+.consent-check input{
+  appearance:none;-webkit-appearance:none;width:20px;height:20px;flex:none;margin:2px 0 0;
+  border:1px solid var(--line-2);border-radius:50%;background:#FFF;position:relative;
+}
+.consent-check input:checked{border-color:var(--rose);background:var(--rose-tint)}
+.consent-check input:checked::after{
+  content:"";position:absolute;left:5.5px;top:3px;width:6px;height:9px;
+  border-right:1.6px solid var(--rose-deep);border-bottom:1.6px solid var(--rose-deep);
+  transform:rotate(40deg);
+}
+.consent-check span{font-size:15px;line-height:1.7;color:var(--ink-2)}
+.fine{margin-top:18px;font-size:13.5px;line-height:1.8;color:var(--ink-3)}
+
+/* ---------- 关系设置 ---------- */
+.set-note{margin-top:12px;font-size:14.5px;line-height:1.8;color:var(--ink-3)}
+.group{margin-top:26px}
+.group-label{font-size:15px;color:var(--ink);letter-spacing:.02em}
+.group-label i{font-style:normal;color:var(--ink-3);font-size:13.5px;margin-left:6px}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.chip{
+  padding:11px 16px;min-height:44px;border-radius:14px;border:1px solid var(--line-2);
+  background:var(--card);color:var(--ink-2);font-size:15px;font-family:var(--sans);
+  transition:background-color .2s,border-color .2s,color .2s,transform .18s;cursor:pointer;
+}
+.chip[aria-pressed="true"]{background:var(--rose-tint);border-color:var(--rose-2);color:var(--rose-deep)}
+.chip:active{transform:scale(.97)}
+
+/* ---------- 题目流 ---------- */
+.qwrap{display:flex;flex-direction:column;height:100dvh}
+.progress{height:2px;background:#EADFD5;position:relative;overflow:hidden}
+.progress i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--rose);transition:width .5s cubic-bezier(.32,.72,.28,1)}
+.qtop{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 0;gap:8px}
+.counter{font-size:13.5px;color:var(--ink-3);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.mini{
+  background:none;border:none;font-family:var(--sans);font-size:14px;color:var(--ink-3);
+  padding:10px 4px;min-height:44px;cursor:pointer;letter-spacing:.02em;
+}
+.qbody{flex:1;overflow-y:auto;padding:26px 24px 20px;display:flex;flex-direction:column}
+.qcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:30px 24px 28px;
+  box-shadow:0 18px 40px -34px rgba(120,92,82,.6);
+}
+.qcard::after{content:"";display:block}
+.qtext{font-family:var(--serif);font-size:21px;line-height:1.72;letter-spacing:.03em;color:#3F3733}
+.qsub{margin-top:12px;font-size:14.5px;line-height:1.8;color:var(--ink-3)}
+.opts{margin-top:26px;display:flex;flex-direction:column;gap:11px}
+.opt{
+  display:flex;align-items:flex-start;gap:12px;width:100%;min-height:54px;
+  padding:15px 16px;border:1px solid var(--line-2);border-radius:16px;background:#FFFDFB;
+  font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--ink);text-align:left;
+  transition:background-color .22s ease,border-color .22s ease,transform .16s ease,box-shadow .22s ease;
+  cursor:pointer;
+}
+.opt:active{transform:scale(.977)}
+.opt .mark{
+  width:19px;height:19px;border-radius:50%;border:1px solid var(--line-2);flex:none;margin-top:3px;
+  position:relative;transition:border-color .2s,background-color .2s;
+}
+.opt.sq .mark{border-radius:5px}
+.opt .mark::after{
+  content:"";position:absolute;left:5px;top:2.5px;width:6px;height:9px;
+  border-right:1.7px solid #fff;border-bottom:1.7px solid #fff;
+  transform:rotate(40deg) scale(.5);opacity:0;transition:opacity .18s,transform .18s;
+}
+.opt[aria-checked="true"]{background:var(--rose-tint);border-color:var(--rose-2);box-shadow:inset 0 0 0 1px rgba(216,179,175,.5)}
+.opt[aria-checked="true"] .mark{border-color:var(--rose);background:var(--rose)}
+.opt[aria-checked="true"] .mark::after{opacity:1;transform:rotate(40deg) scale(1)}
+.opt[aria-disabled="true"]{opacity:.45}
+.opt .idx{
+  font-size:12.5px;line-height:1;color:var(--rose-deep);background:var(--rose-2);
+  color:#fff;border-radius:6px;padding:4px 6px;margin-top:2px;flex:none;font-variant-numeric:tabular-nums;
+  min-width:20px;text-align:center;
+}
+.qfoot{
+  padding:10px 24px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(251,246,240,0),var(--paper) 34%);
+}
+.qhint{font-size:13.5px;color:var(--ink-3);text-align:center;margin-bottom:10px;line-height:1.6;min-height:22px}
+
+/* ---------- 补充环节 ---------- */
+.slider-box{margin-top:22px;padding:24px 20px 20px;background:var(--card);border:1px solid var(--line);border-radius:22px}
+.slider-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.slider-val{font-family:var(--serif);font-size:30px;color:var(--rose-deep);line-height:1;font-variant-numeric:tabular-nums}
+.slider-val small{font-size:13px;color:var(--ink-3);margin-left:2px;font-family:var(--sans)}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:8px 0 0;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--rose) 0%,var(--rose) var(--p,50%),#EFE3DA var(--p,50%),#EFE3DA 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#FFFCF8;border:1px solid var(--rose-2);box-shadow:0 4px 12px -6px rgba(120,80,75,.9);margin-top:-10px}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:#EFE3DA}
+input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:var(--rose)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#FFFCF8;border:1px solid var(--rose-2)}
+.slider-scale{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.rank-list{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.rank-item{
+  display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:14px 16px;
+  border:1px solid var(--line-2);border-radius:16px;background:#FFFDFB;
+  font-family:var(--sans);font-size:15.5px;color:var(--ink);text-align:left;cursor:pointer;
+  transition:background-color .2s,border-color .2s,transform .16s;
+}
+.rank-item:active{transform:scale(.977)}
+.rank-item .num{
+  width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--ink-3);border:1px solid var(--line-2);font-variant-numeric:tabular-nums;
+}
+.rank-item[aria-checked="true"]{background:var(--rose-tint);border-color:var(--rose-2)}
+.rank-item[aria-checked="true"] .num{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* ---------- 加载 ---------- */
+.loading{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100dvh;padding:40px 34px;text-align:center;
+}
+.loader{width:150px;height:34px;position:relative;margin-bottom:34px}
+.loader i{
+  position:absolute;left:0;top:16px;height:2px;background:var(--rose);
+  border-radius:2px;animation:breathe 1.5s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%{width:0;opacity:.35}
+  55%{width:150px;opacity:.9}
+  100%{width:150px;opacity:.2}
+}
+.loading h2{font-size:20px;letter-spacing:.05em;color:#3F3733;line-height:1.6}
+.loading p{margin-top:16px;font-size:14px;color:var(--ink-3);line-height:1.8}
+
+/* ---------- 结果页 ---------- */
+.result{padding-top:calc(30px + env(safe-area-inset-top))}
+.rhead{padding:0 26px}
+.rhead .eyebrow{font-size:13.5px;color:var(--rose-deep);letter-spacing:.1em}
+.rhead h2{font-size:23px;line-height:1.6;margin-top:12px;color:#3F3733}
+.rhead h2 b{font-weight:600;color:var(--rose-deep)}
+.rhead .sub{margin-top:12px;font-size:15px;color:var(--ink-2);line-height:1.8}
+.scorebox{margin:26px 26px 0;padding:26px 22px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card)}
+.score-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.score-num{font-family:var(--serif);font-size:46px;line-height:1;color:#3F3733;font-variant-numeric:tabular-nums}
+.score-num small{font-size:14px;color:var(--ink-3);font-family:var(--sans);margin-left:4px}
+.score-band{font-size:14.5px;color:var(--rose-deep);text-align:right;line-height:1.5}
+.trackers{margin-top:18px;display:flex;flex-direction:column;gap:13px}
+.tr-row{display:grid;grid-template-columns:76px 1fr 34px;align-items:center;gap:11px}
+.tr-name{font-size:14px;color:var(--ink-2);letter-spacing:.02em;white-space:nowrap}
+.tr-line{height:8px;border-radius:4px;background:#F0E6DC;overflow:hidden}
+.tr-line i{display:block;height:100%;border-radius:4px;background:var(--rose-2);width:0;transition:width .9s cubic-bezier(.25,.8,.3,1)}
+.tr-line i.hi{background:var(--rose)}
+.tr-line i.lo{background:var(--blue)}
+.tr-val{font-size:13px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+.rsec{margin:34px 26px 0}
+.rsec h3{font-size:16.5px;font-family:var(--sans);font-weight:600;letter-spacing:.02em;color:#4A423E;display:flex;align-items:center;gap:8px}
+.rsec h3::before{content:"";width:14px;height:1px;background:var(--rose-2)}
+.rsec .cap{margin-top:6px;font-size:13.5px;color:var(--ink-3)}
+.card-list{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.r-card{padding:20px 20px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.r-card h4{margin:0;font-family:var(--sans);font-size:14.5px;font-weight:600;color:var(--rose-deep);letter-spacing:.03em}
+.r-card p{margin-top:7px;font-size:15.5px;line-height:1.85;color:var(--ink-2)}
+.flagbox{margin:26px 26px 0;padding:20px 20px;border-radius:20px;background:#FCF3EE;border:1px solid #EFDCD2}
+.flagbox h4{margin:0;font-size:15px;font-weight:600;color:#9B5F55}
+.flagbox p{margin-top:8px;font-size:15px;line-height:1.85;color:#7B5E57}
+.remind{margin-top:14px;padding:22px 20px;border-radius:20px;background:var(--blue-tint);border:1px solid #DBE5E9}
+.remind p{font-size:15px;line-height:1.9;color:#5E6E74}
+.disclaim{margin:26px 26px 0;font-size:13px;line-height:1.85;color:var(--ink-3);padding-top:18px;border-top:1px solid var(--line)}
+.ractions{margin:30px 26px 0;display:flex;flex-direction:column;gap:11px}
+.rfoot{padding:24px 26px calc(30px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+
+/* ---------- 免责/隐私 ---------- */
+.privacy-block{margin-top:24px}
+.privacy-block h3{font-size:16.5px;font-weight:600;font-family:var(--sans);letter-spacing:.02em;color:#4A423E}
+.privacy-block p,.privacy-block ul{margin-top:9px;font-size:15px;line-height:1.9;color:var(--ink-2)}
+.privacy-block ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.privacy-block li{display:flex;gap:8px}
+.privacy-block li::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--rose-2);margin-top:11px;flex:none}
+.hotline{margin-top:12px;padding:16px;border-radius:16px;background:#F7EFE7;font-size:14.5px;line-height:1.9;color:#6E625B}
+.hotline b{color:#4A423E;font-weight:600}
+
+/* ---------- 弹层 ---------- */
+.modal{
+  position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+  background:rgba(64,52,48,.34);backdrop-filter:blur(2px);padding:26px;
+}
+.modal.is-on{display:flex;animation:rise .3s ease both}
+.modal-box{
+  width:100%;max-width:340px;background:var(--card);border-radius:24px;padding:26px 22px 20px;text-align:center;
+  box-shadow:0 30px 60px -30px rgba(60,45,40,.6);
+}
+.modal-box h3{font-size:18px;line-height:1.6;color:#3F3733}
+.modal-box p{margin-top:10px;font-size:14.5px;line-height:1.8;color:var(--ink-2)}
+.modal-acts{margin-top:20px;display:flex;flex-direction:column;gap:9px}
+.modal-img{width:100%;border-radius:14px;display:block;box-shadow:0 14px 30px -18px rgba(80,60,55,.7)}
+.poster-modal .modal-box{max-width:360px}
+.poster-hint{margin-top:12px;font-size:13px;color:var(--ink-3);line-height:1.7}
+.toast{
+  position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translate(-50%,10px);
+  background:rgba(70,58,54,.92);color:#FDF7F2;font-size:14px;line-height:1.5;
+  padding:11px 18px;border-radius:999px;z-index:50;opacity:0;pointer-events:none;
+  transition:opacity .26s,transform .26s;max-width:80vw;text-align:center;
+}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+/* ---------- PC 端适配：大屏放宽，字号与点击区加大 ---------- */
+@media (min-width:820px){
+  .app{max-width:560px}
+  .qtop{padding:16px 34px 0}
+  .counter{font-size:14.5px}
+  .mini{font-size:15px}
+  .qbody{padding:30px 32px 26px;justify-content:center}
+  .qcard{padding:40px 34px 36px;border-radius:30px}
+  .qtext{font-size:24px;line-height:1.78}
+  .qsub{font-size:15px}
+  .opts{margin-top:30px;gap:13px}
+  .opt{min-height:60px;padding:18px 20px;font-size:17px;border-radius:18px}
+  .opt .mark{width:20px;height:20px}
+  .qfoot{padding:16px 32px calc(26px + env(safe-area-inset-bottom))}
+  .qhint{font-size:14px}
+  .qfoot .btn{min-height:58px;font-size:17px}
+  .cover{padding:72px 44px 36px}
+  .cover-copy h1{font-size:clamp(40px,4.6vw,52px)}
+  .cover-sub{font-size:16.5px;max-width:23em;margin-top:26px}
+  .rhead{padding:0 34px}
+  .scorebox{margin:28px 34px 0}
+  .rsec{margin:36px 34px 0}
+  .flagbox{margin:28px 34px 0}
+  .disclaim{margin:28px 34px 0}
+  .ractions{margin:32px 34px 0}
+}</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ===== 视图：封面 ===== -->
+<section class="view is-on" id="v-cover" aria-label="封面">
+  <div class="cover">
+    <div class="cover-mark">
+      <svg class="sigil" viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="dot" cx="60" cy="60" r="7.5"/>
+        <path class="near" d="M74 36a26 26 0 0 1 0 48"/>
+        <path class="near" d="M46 36a26 26 0 0 0 0 48"/>
+        <path class="far" d="M84 26a40 40 0 0 1 0 68"/>
+        <path class="far" d="M36 26a40 40 0 0 0 0 68"/>
+        <path class="far" d="M93 17a54 54 0 0 1 0 86" opacity=".55"/>
+        <path class="far" d="M27 17a54 54 0 0 0 0 86" opacity=".55"/>
+      </svg>
+    </div>
+
+    <div class="cover-copy">
+      <h1>亲密关系<br>关怀感知评估</h1>
+      <p class="cover-sub">25 题 · 约 4–5 分钟<br>评估你在当前亲密关系中主观体验到的情感支持水平。</p>
+      <div class="cover-meta">
+        <div class="cover-tags">
+          <span class="tag">亲密关系</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-foot">
+      <button class="btn primary" id="btnStart">开始评估</button>
+      <div class="cover-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="lockline" style="margin-top:14px">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4.5" y="10" width="15" height="10.5" rx="3" stroke="#9A8D86" stroke-width="1.6"/><path d="M8 10V7.6a4 4 0 0 1 8 0V10" stroke="#9A8D86" stroke-width="1.6"/></svg>
+        <span>匿名作答 · 数据本地处理 · 非临床诊断</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：知情同意 ===== -->
+<section class="view" id="v-consent" aria-label="知情同意与作答指导">
+  <div class="page">
+    <div class="topbar">
+      <button class="iconbtn" data-goto="cover" aria-label="返回封面">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 6 8 12l6.5 6" stroke="#9A8D86" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="scroll">
+      <div class="kicker">开始之前 · 测验说明</div>
+      <h2 class="page-title">本测验旨在协助您评估当前的心理状态与行为倾向。</h2>
+      <p class="lead">在开始作答前，建议您先花一分钟阅读测试说明，了解本测试的适用范围与局限性。</p>
+
+      <div class="blocks">
+        <div class="block">
+          <h3><span>一</span>它测什么</h3>
+          <p>测的是最近这几周里，你从她的言行中感受到的关怀感知水平：她有没有主动靠近你的生活、能不能感知并关照你的情绪、愿不愿意把时间和行动投进来、是否尊重你的边界、相处起来稳不稳定等。</p>
+        </div>
+        <div class="block">
+          <h3><span>二</span>它不测什么</h3>
+          <p>不能得出她到底爱不爱你的结论，不会对双方的人格做批判，也不预测你们会走向何方。分数只描述你的感受，不是对她的审判，仅仅作为参考。需要更详细的内容，请前往更专业的问卷版本。</p>
+        </div>
+        <div class="block">
+          <h3><span>三</span>怎么答</h3>
+          <p>按最近 2-4 周的真实感受作答，没有对错，没有标准答案，第一反应通常最接近真实。</p>
+        </div>
+        <div class="block">
+          <h3><span>四</span>关于隐私</h3>
+          <p>以下问卷内容不会被收录，仅本人可见，请放心作答。</p>
+        </div>
+      </div>
+
+      <label class="consent-check" for="consentBox">
+        <input type="checkbox" id="consentBox">
+        <span>我了解了它的范围和边界，愿意按真实感受作答。</span>
+      </label>
+      <p class="fine">本测试基于心理测量学原则设计，仅供自我觉察与沟通参考，不构成心理诊断、情感判决或专业咨询建议。</p>
+    </div>
+    <div class="dock">
+      <button class="btn primary" id="btnConsent" disabled>继续</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：关系设置 ===== -->
+<section class="view" id="v-setup" aria-label="关系状态与作答设置">
+  <div class="page">
+    <div class="topbar">
+      <button class="iconbtn" data-goto="consent" aria-label="返回">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 6 8 12l6.5 6" stroke="#9A8D86" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="scroll">
+      <div class="kicker">可选 · 随便填</div>
+      <h2 class="page-title">先说说这段关系</h2>
+      <p class="set-note">这几项只用来让结果解释更贴近你的处境，<strong>不参与计分</strong>。不想填的，全部空着也行。</p>
+
+      <div class="group">
+        <div class="group-label">现在的关系阶段<i>单选</i></div>
+        <div class="chips" data-group="stage">
+          <button class="chip" data-val="暧昧" aria-pressed="false">暧昧</button>
+          <button class="chip" data-val="约会中" aria-pressed="false">约会中</button>
+          <button class="chip" data-val="稳定伴侣" aria-pressed="false">稳定伴侣</button>
+          <button class="chip" data-val="复合观察" aria-pressed="false">复合观察</button>
+          <button class="chip" data-val="不确定" aria-pressed="false">不确定</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-label">认识多久了<i>单选</i></div>
+        <div class="chips" data-group="duration">
+          <button class="chip" data-val="1个月内" aria-pressed="false">1 个月内</button>
+          <button class="chip" data-val="1-6个月" aria-pressed="false">1–6 个月</button>
+          <button class="chip" data-val="6个月-2年" aria-pressed="false">6 个月–2 年</button>
+          <button class="chip" data-val="2年以上" aria-pressed="false">2 年以上</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-label">你们的距离<i>单选</i></div>
+        <div class="chips" data-group="distance">
+          <button class="chip" data-val="同城" aria-pressed="false">同城</button>
+          <button class="chip" data-val="异地" aria-pressed="false">异地</button>
+          <button class="chip" data-val="同居" aria-pressed="false">同居</button>
+        </div>
+      </div>
+
+      <p class="fine">再点一次可以取消选择。</p>
+    </div>
+    <div class="dock">
+      <div class="dock-row">
+        <button class="btn soft" id="btnSetupSkip" style="flex:1">跳过</button>
+        <button class="btn primary" id="btnSetupNext" style="flex:2">继续</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.peaks{margin:16px 26px 0;display:flex;flex-direction:column;gap:10px}
+.peak{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:13px 16px;border-radius:16px;background:#FAF2EB}
+.plabel{font-size:13.5px;color:var(--ink-3);line-height:1.6}
+.pval{font-size:15px;color:var(--rose-deep);white-space:nowrap}
+.poster-modal .modal-box{padding:18px 18px 16px}
+.poster-actions{display:flex;gap:9px;margin-top:14px}
+.poster-actions .btn{min-height:46px;font-size:15px}
+/* ---------- PC 端适配：大屏放宽，字号与点击区加大 ---------- */
+@media (min-width:820px){
+  .app{max-width:560px}
+  .qtop{padding:16px 34px 0}
+  .counter{font-size:14.5px}
+  .mini{font-size:15px}
+  .qbody{padding:30px 32px 26px;justify-content:center}
+  .qcard{padding:40px 34px 36px;border-radius:30px}
+  .qtext{font-size:24px;line-height:1.78}
+  .qsub{font-size:15px}
+  .opts{margin-top:30px;gap:13px}
+  .opt{min-height:60px;padding:18px 20px;font-size:17px;border-radius:18px}
+  .opt .mark{width:20px;height:20px}
+  .qfoot{padding:16px 32px calc(26px + env(safe-area-inset-bottom))}
+  .qhint{font-size:14px}
+  .qfoot .btn{min-height:58px;font-size:17px}
+  .cover{padding:72px 44px 36px}
+  .cover-copy h1{font-size:clamp(40px,4.6vw,52px)}
+  .cover-sub{font-size:16.5px;max-width:23em;margin-top:26px}
+  .rhead{padding:0 34px}
+  .scorebox{margin:28px 34px 0}
+  .rsec{margin:36px 34px 0}
+  .flagbox{margin:28px 34px 0}
+  .disclaim{margin:28px 34px 0}
+  .ractions{margin:32px 34px 0}
+}</style>
+
+<!-- ===== 视图：题目流 ===== -->
+<section class="view" id="v-q" aria-label="作答">
+  <div class="qwrap">
+    <div class="progress"><i id="pFill"></i></div>
+    <div class="qtop">
+      <button class="mini" id="btnPrev">上一题</button>
+      <span class="counter" id="qCounter">第 1 ／ 25 题</span>
+      <button class="mini" id="btnQuit">退出</button>
+    </div>
+    <div class="qbody">
+      <div class="qcard">
+        <div class="qtext" id="qText"></div>
+        <div class="qsub" id="qSub" hidden></div>
+        <div class="opts" id="qOpts" role="radiogroup" aria-labelledby="qText"></div>
+      </div>
+    </div>
+    <div class="qfoot">
+      <div class="qhint" id="qHint">选一个最接近你的</div>
+      <button class="btn primary" id="btnNext" disabled>下一题</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：补充感受 ===== -->
+<section class="view" id="v-supp" aria-label="补充感受">
+  <div class="page">
+    <div class="scroll">
+      <div class="kicker">最后一点补充</div>
+      <h2 class="page-title">把感受说得再具体一点</h2>
+      <p class="set-note">下面两项<strong>不计入总分</strong>，只用来让结果更贴近你。不想答，直接跳过也可以。</p>
+
+      <div class="slider-box">
+        <div class="slider-top">
+          <div style="font-size:15px;color:var(--ink-2);line-height:1.6">总的来说，这两三周里<br>你感到被关心的程度是</div>
+          <div class="slider-val"><span id="sliderNum">50</span><small>/ 100</small></div>
+        </div>
+        <input type="range" id="slider" min="0" max="100" step="1" value="50" aria-label="你感到被关心的程度，0 到 100">
+        <div class="slider-scale"><span>几乎感觉不到</span><span>非常确定</span></div>
+      </div>
+
+      <div class="group">
+        <div class="group-label">这 4 种关心方式，你更在意哪一种？<i>按顺序点选</i></div>
+        <p class="set-note" style="margin-top:6px">点第一下 = 你最在意的那一项，不参与计分，只影响建议的顺序。</p>
+        <div class="rank-list" id="rankList" role="group" aria-label="关心方式排序"></div>
+      </div>
+      <p class="fine">都可以不答，直接看结果。</p>
+    </div>
+    <div class="dock">
+      <div class="dock-row">
+        <button class="btn soft" id="btnSuppSkip" style="flex:1">跳过</button>
+        <button class="btn primary" id="btnSuppGo" style="flex:2">看我的结果</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：计算加载 ===== -->
+<section class="view" id="v-loading" aria-label="正在计算">
+  <div class="loading">
+    <div class="loader" aria-hidden="true"><i></i></div>
+    <h2>正在整理你的<br>关怀感知图谱…</h2>
+    <p>所有计算都在这台设备上完成<br>不会有任何内容离开这里</p>
+  </div>
+</section>
+
+<!-- ===== 视图：结果 ===== -->
+<section class="view" id="v-result" aria-label="结果">
+  <div class="result">
+    <div class="rhead">
+      <div class="eyebrow">你的感受图谱</div>
+      <h2>你在这段关系里感知到的关心程度：<b id="rBand">—</b></h2>
+      <p class="sub">本结果反映您的个人感受，不构成对伴侣的评价。</p>
+    </div>
+
+    <div class="scorebox">
+      <div class="score-top">
+        <div class="score-num"><span id="rTotal">0</span><small>／ 100</small></div>
+        <div class="score-band" id="rBandNote"></div>
+      </div>
+      <div class="trackers" id="rTrackers"></div>
+    </div>
+
+    <div class="peaks">
+      <div class="peak">
+        <span class="plabel">你较能感受到的关怀感知</span>
+        <span class="pval" id="rHigh">—</span>
+      </div>
+      <div class="peak">
+        <span class="plabel">目前较需要被看见的部分</span>
+        <span class="pval" id="rLow">—</span>
+      </div>
+    </div>
+
+    <div class="rsec">
+      <h3>核心维度解析</h3>
+      <p class="cap">以下内容基于您的作答数据提取，反映特定情境下的互动模式，不构成对人格的定性评估。</p>
+      <div class="card-list" id="rExplain"></div>
+    </div>
+
+    <div class="rsec">
+      <h3>可以试着说出口的两句话</h3>
+      <p class="cap">都是「当…，我感到…，我希望…」的句式。内容仅做参考，可根据个人情况进行调整。</p>
+      <div class="card-list" id="rAdvice"></div>
+    </div>
+
+    <div class="rsec">
+      <h3>留给你的一句话</h3>
+      <div class="remind"><p id="rRemind"></p></div>
+    </div>
+
+    <div id="rFlagWrap"></div>
+
+    <p class="disclaim">本测试基于心理测量学原则设计，仅供自我觉察与沟通参考，不构成心理诊断、情感判决或专业咨询建议。分数描述的只是你此刻的感受密度，不是她的心意清单，也不是关系走向的预测。</p>
+
+    <div class="ractions">
+      <button class="btn primary" id="btnPoster">保存结果海报</button>
+      <button class="btn soft" id="btnRestart">重新测试</button>
+    </div>
+    <div class="rfoot">
+      <button class="linkish" data-goto="privacy">隐私说明</button>
+      <button class="linkish" data-goto="privacy">心理求助资源</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视图：隐私与免责 ===== -->
+<section class="view" id="v-privacy" aria-label="隐私与免责">
+  <div class="page">
+    <div class="topbar">
+      <button class="iconbtn" data-goto="back" aria-label="返回">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 6 8 12l6.5 6" stroke="#9A8D86" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="scroll">
+      <div class="kicker">隐私与边界</div>
+      <h2 class="page-title">你的答案，从未离开过这台设备</h2>
+
+      <div class="privacy-block">
+        <h3>关于计算</h3>
+        <p>全部 25 道题的作答、计分、维度换算和结果文案，都在这台设备的浏览器里用本地脚本完成。页面不调用任何服务器，不写入云端，也不使用第三方统计或广告脚本。关闭页面后，这次作答不会被再次读取。</p>
+        <p style="margin-top:8px">结果海报是在本地生成的图片，只有你自己点了「保存」，它才会出现在你的相册里。</p>
+      </div>
+
+      <div class="privacy-block">
+        <h3>关于信息收集</h3>
+        <ul>
+          <li>以下问卷内容不会保存，请放心作答。</li>
+          <li>不收集姓名、手机号、位置、通讯录与设备标识</li>
+          <li>关系阶段、认识时长、距离都可以留空</li>
+          <li>海报上只出现一个随机生成的匿名编号</li>
+        </ul>
+      </div>
+
+      <div class="privacy-block">
+        <h3>关于它的边界</h3>
+        <p>这是一份自我觉察工具，不是量表诊断，也不替代心理咨询。分数低不等于关系有问题，分数高也不等于关系安全——它只反映你在最近这几周里接收到了多少关怀感知。</p>
+      </div>
+
+      <div class="privacy-block">
+        <h3>如果情绪有点重</h3>
+        <p>有些时候，做完这样的测试会让人更清楚一些，也可能更难受一些。如果低落、焦虑、失眠持续超过两周，或者出现伤害自己的念头，请把它交给更专业的人。</p>
+        <div class="hotline">
+          <b>全国心理援助热线 12356</b>（24 小时）<br>
+          <b>北京心理危机研究与干预中心</b> 010-82951332<br>
+          也可以去当地三甲医院的<b>心理科 / 精神科</b>挂号，或联系你信任的、能陪你去的人。<br>
+          <span style="font-size:13.5px;color:var(--ink-3)">号码与时段可能随地区调整，以当地最新公布的信息为准。</span>
+        </div>
+      </div>
+
+      <div class="privacy-block">
+        <h3>版权与反馈</h3>
+        <p>题目、计分逻辑与文案均为原创设计。个人自测、朋友之间分享可以自由使用；如需转载、二次改编或商用，请先联系作者取得授权，不要直接搬运成商品化的「心理测试」。</p>
+        <p style="margin-top:8px">如果你在某一题上觉得措辞冒犯、或者觉得少了某种处境（比如跨性别、双性恋、开放关系），欢迎在使用它的那个平台里直接留言，这些反馈会被用来改题。</p>
+      </div>
+
+      <p class="disclaim" style="margin:26px 0 0">本测试基于心理测量学原则设计，仅供自我觉察与沟通参考，不构成心理诊断、情感判决或专业咨询建议。</p>
+    </div>
+    <div class="dock">
+      <button class="btn soft" data-goto="back">返回</button>
+    </div>
+  </div>
+</section>
+
+</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+
+/* ============ 配置：维度与权重（可在此调整） ============ */
+const DIMS = {
+  A:{name:'主动关注', hint:'记得细节、主动靠近你的生活', w:0.20},
+  B:{name:'情绪回应', hint:'察觉你的低落、安慰与共情', w:0.20},
+  C:{name:'实际投入', hint:'时间、行动、陪伴与兑现', w:0.20},
+  D:{name:'边界与尊重', hint:'尊重空间、不控制、不贬低', w:0.1333},
+  E:{name:'一致性稳定', hint:'言行一致、态度稳定', w:0.1333},
+  F:{name:'沟通开放', hint:'愿意谈关系、能处理分歧', w:0.1333}
+};
+const DIM_ORDER = ['A','B','C','D','E','F'];
+const AGREE = ['非常不同意','不同意','一般','同意','非常同意'];
+const FREQ  = ['从不','很少','有时','经常','总是'];
+
+/* ============ 题库：24 道计分题（6 维度 × 4 题）+ 1 道注意力检测 ============ */
+const QUESTIONS = [
+  { id:'q1',  dim:'A', kind:'freq',  scale:'freq',
+    text:'对方能够记住你此前提及的个人细节（饮食偏好、怕冷、近期事务），并在后续互动中自然提及。' },
+  { id:'q2',  dim:'B', kind:'agree', scale:'agree', reverse:true,
+    text:'即使你处于明显的情绪低落状态，对方也较少察觉。' },
+  { id:'q3',  dim:'E', kind:'agree', scale:'agree', reverse:true,
+    text:'对方对你的态度波动较大，你常难以预判其当下的状态。' },
+  { id:'q4',  dim:'C', kind:'freq',  scale:'freq',
+    text:'对方会专门为与你相处预留时间，而非仅在日程空隙中顺带见面。' },
+  { id:'q5',  dim:'D', kind:'agree', scale:'agree',
+    text:'当你表示需要独处、或不愿参与某项安排时，对方能够尊重你的选择。' },
+  { id:'q6',  dim:'F', kind:'agree', scale:'agree',
+    text:'当你提出希望讨论双方之间的问题或感受时，对方愿意就此进行对话。' },
+  { id:'q7',  dim:'A', kind:'agree', scale:'agree',
+    text:'在双方的互动中，关心与联系更多由对方主动发起，而非由你先行提出需求。' },
+  { id:'q8',  dim:'B', kind:'agree', scale:'agree',
+    text:'当你表达难过或压力时，对方会先接纳你的情绪，再处理其他内容。' },
+  { id:'q9',  dim:'E', kind:'freq',  scale:'freq',
+    text:'无论对方当前是否有求于你，对方对你的态度和关心都保持一致。' },
+  { id:'q10', dim:'C', kind:'agree', scale:'agree',
+    text:'对方承诺过你的事情大多能够兑现，不会习惯性地随口许诺。' },
+  { id:'q11', dim:'D', kind:'agree', scale:'agree',
+    text:'对方不会贬低或嘲讽你的想法与个人喜好。' },
+  { id:'q12', dim:'F', kind:'freq',  scale:'freq',
+    text:'出现分歧后，双方能够共同协商出可执行的解决方案。' },
+  { id:'q13', dim:'A', kind:'choice',
+    text:'当你处于明显的状态低谷（连续加班、生病或情绪低落）时，对方通常会：',
+    sub:'请选择最近真实发生过的情形，而非你希望对方会做的。',
+    opts:[
+      { t:'需要你反复说明才会留意，回应也较为有限', s:1 },
+      { t:'会简单问候，但缺乏持续关注', s:2 },
+      { t:'会关心几句，但不会深入跟进', s:3 },
+      { t:'能够主动察觉，并适时询问你的状态', s:4 },
+      { t:'主动察觉，并持续跟进、提供实际支持', s:5 }
+    ] },
+  { id:'q14', dim:'B', kind:'choice',
+    text:'当你向对方倾诉近期的情绪困扰时，对方最常见的回应是：',
+    opts:[
+      { t:'回避该话题，或明显转为冷淡', s:1 },
+      { t:'认为你反应过度，或暗示你在添麻烦', s:2 },
+      { t:'回应较为简短，情绪上缺乏承接', s:3 },
+      { t:'会给予简短安慰，但很快转移话题', s:4 },
+      { t:'倾听你说完，并尝试理解你的感受', s:5 }
+    ] },
+  { id:'q15', dim:'E', kind:'agree', scale:'agree',
+    text:'即使双方之间存在矛盾，对方对你的基本态度也不会突然反转。' },
+  { id:'q16', dim:'C', kind:'choice',
+    text:'当你遇到突发状况，临时需要实际的协助（如身体不适需照顾、搬运重物等）时，对方通常的反应是：',
+    opts:[
+      { t:'多半由你自行处理', s:1 },
+      { t:'口头表示关心，实际协助有限', s:2 },
+      { t:'能够提供部分帮助，但可能受限于其个人安排', s:3 },
+      { t:'会尽量协调时间前来协助', s:4 },
+      { t:'会调整自身安排来配合你的需要', s:5 }
+    ] },
+  { id:'q17', dim:'D', kind:'freq',  scale:'freq', reverse:true,
+    text:'对方会查看你的手机或聊天记录，或干涉你与他人的正常交往。' },
+  { id:'q18', dim:'F', kind:'agree', scale:'agree',
+    text:'对方愿意向你表达其在意，也愿意接收你提出的需求。' },
+  { id:'q19', dim:'A', kind:'multi', max:4,
+    text:'近两周内，对方出现过下列哪些主动关注行为？',
+    sub:'最多选 4 项。一项都没有的话，点下面的「都不记得」跳过即可。',
+    items:['主动分享其日常近况，并等待你的回应',
+           '记住并留意你的重要日程',
+           '留意你近期喜好与反感的事物',
+           '主动询问你当下的状态或安排',
+           '主动提出见面，或询问你当下的动向'] },
+  { id:'q20', dim:'B', kind:'freq',  scale:'freq',
+    text:'当你情绪低落时，对方会先陪伴你的情绪，而非立刻给出建议或评价。' },
+  { id:'q21', dim:'E', kind:'agree', scale:'agree',
+    text:'对方的言语表述与其实际行为大体一致。' },
+  { id:'q22', dim:'C', kind:'multi', max:4,
+    text:'近两周内，对方为你提供过下列哪些实际投入？',
+    sub:'最多选 4 项。请以真实发生过的行为为准，而非对方口头承诺过的内容。',
+    items:['特意安排时间与你见面相处',
+           '按约定时间准时赴约',
+           '为你调整过其原有计划',
+           '主动分担你的具体事务（跑腿、代买、协助处理事项）',
+           '在你状态不佳时提供实际照顾（递送物品、陪同就医等）'] },
+  { id:'q23', dim:'D', kind:'choice',
+    text:'当你临时取消一次双方约定时，对方的反应通常是：',
+    opts:[
+      { t:'生气或指责你不重视这段关系，并施加情绪压力', s:1 },
+      { t:'明显不悦，随后数日态度转冷', s:2 },
+      { t:'反复追问原因，虽应允但要求你反复解释', s:3 },
+      { t:'虽有失落，但表示理解，并主动提出下次安排', s:4 },
+      { t:'先确认你是否安好，爽快改期，不让你产生负担', s:5 }
+    ] },
+  { id:'q24', dim:'F', kind:'freq',  scale:'freq',
+    text:'对方会主动与你核对双方的关系期待，如联系频率与见面的节奏。' },
+  { id:'q25', dim:null, kind:'freq', scale:'freq', role:'attention', expect:3,
+    text:'这道题用来确认你在认真读题。请直接选择「经常」，不用考虑内容。',
+    sub:'这一题不计分。' }
+];
+
+const TOTAL_Q = QUESTIONS.length;
+
+/* ============ 结果解释与建议文案 ============ */
+const EXPL = {
+  A:{ high:'您感受到对方较常关注您的生活细节，并能主动询问。这种日常的细节关注，是情感投入的重要行为证据。',
+      mid:'您能偶尔接收到对方的关注，但在部分时刻，仍需要您主动发起分享或话题。支持感存在，但连续性不足。',
+      low:'您的生活近况多需要由您主动提及。这不一定代表对方缺乏意愿，但表明其尚未形成主动关注您日常的习惯。' },
+  B:{ high:'在您情绪低落时，对方较常能敏锐察觉并提供情感共鸣，而非急于给出建议。这种「情绪接纳」是高质量关系的核心支撑。',
+      mid:'对方有时能接纳您的情绪，有时则更倾向于直接提供解决方案。您可能已形成筛选倾诉内容的习惯，以规避不被理解的体验。',
+      low:'您感受到对方较难第一时间察觉您的负面情绪，或对您的感受存在误判。长期缺乏情绪认领，会显著降低个体的表达意愿。' },
+  C:{ high:'对方愿意为您投入时间，且承诺兑现度较高。这种实际的行动投入，比口头表达更具支持效力。',
+      mid:'对方有投入意愿，但在时间分配或承诺兑现上偶尔存在缺失。您能感知到其心意，但其优先级的稳定性仍有不足。',
+      low:'对方的关怀多停留在语言层面，在实际行动、时间投入及关键时刻的在场感上相对欠缺。这种落差会逐渐削弱关系中的安全感。' },
+  D:{ high:'对方尊重您的个人空间，在意见分歧时能保持客观，不贬低您。能在关系中安全地表达拒绝，是重要的健康指标。',
+      mid:'多数时候对方能保持尊重，但在您表达拒绝、需要独处或变更计划时，您可能会感到需要过度解释，并对对方的反应有所顾虑。',
+      low:'表达拒绝或需要个人空间时，您可能会感到压力。您可能已习惯优先照顾对方的情绪，而压抑自身的边界需求。' },
+  E:{ high:'对方近期的态度与回应模式较稳定，具有较高的可预期性。稳定的关系并非时刻热情，而是能提供基本的确定感。',
+      mid:'对方的情绪或互动节奏偶有波动，但总体可读。您有时需要依靠回顾过往经验来推断其当前状态。',
+      low:'对方的互动模式（热情与冷淡）切换较频繁，您需要耗费较多精力去揣测对方的状态或归因于自身。这种不确定性本身具有较高的内耗性。' },
+  F:{ high:'双方具备开放沟通的能力，面对分歧愿意协商探讨，而非采取冷处理。良好的沟通机制是解决关系问题的基石。',
+      mid:'日常交流顺畅，但涉及关系核心、边界界定或实质分歧时，沟通常常难以深入或被搁置。',
+      low:'关系层面的深度沟通难以展开，分歧常以回避或冷战告终。您可能对双方的关系定位及自身表达空间缺乏确信。' }
+};
+const ADVICE = {
+  A:'「当我发现近期较少接收到你主动的问候时，我感到有些失落；我希望我们能每天留出几分钟，互相交流一下近况。」',
+  B:'「当我情绪低落，而你优先基于事情本身进行理性分析时，我会感到自己的感受被跳过了；我希望您能先给予我情感上的陪伴，之后再一起探讨对策。」',
+  C:'「当约定未能如期兑现时，我会对自身在你那里的重要性产生疑虑；我希望如果计划有变，你能提前告知我，而不是让约定失效。」',
+  D:'「当我需要独处，而你反复追问时，我会感到边界被挤压；我希望你能理解，我需要个人空间并不代表我在疏远这段关系。」',
+  E:'「当你突然变得冷淡时，我会倾向于内归因（认为是自己的问题）；我希望如果你只是疲惫或忙碌，能直接告诉我，避免让我陷入不确定的猜测中。」',
+  F:'「当关系中的关键问题一直被回避时，我会感到缺乏安全感；我希望我们能安排一个不受打扰的时间，坦诚地明确我们当前的关系状态。」'
+};
+const REMIND = {
+  low:'关怀感知偏低，并不直接等同于对方缺乏在意，也不意味着您的感受是过度敏感。这可能是双方表达方式存在错位，也可能是当前关系阶段尚未达到深度投入，或对方近期自身状态不佳。建议先将此结果视作一份“个人需求觉察清单”，而非对关系的最终定论。',
+  mid:'您的体验呈现波动状态。这种“有时有、有时无”的落差感，容易引发自我怀疑。差异本身并非问题，关键在于缺乏沟通。建议在双方情绪平稳时，以客观表达感受代替主观猜测。',
+  clear:'在多数情境下，您能体验到对方的关怀，但在某些特定情境下仍存在未被满足的需求。这是较具调整空间的阶段：对于积极的互动可给予正向反馈，对于未满足的部分，建议进行具体、非指责性的沟通。',
+  strong:'您在这段关系中获得了较高的确定感与支持感。稳定关系亦有起伏，建议避免因偶发的冷淡而全盘否定关系；同时，需保持自我边界的觉察，避免因对方一贯良好而压抑自身的合理需求。'
+};
+const STAGE_NOTE = {
+  '暧昧':'此阶段的互动本身具有较高的不确定性，分数偏低受阶段特性影响较大。重点在于评估对方提供的互动模式，是否符合您对亲密关系的预期。',
+  '复合观察':'「一致性稳定」维度的得分偏低属常见现象。允许其处于低位，但需重点观察其后续是否存在持续回升的趋势。',
+  '异地':'物理距离会客观稀释日常陪伴感。需区分「实际投入」偏低是受限于客观距离，还是主观意愿不足。',
+  '不确定':'由于关系状态本身模糊，作答可能存在偏差。建议将此结果视作一次阶段性的自我核对，无需将其视为最终结论。'
+};
+const RANKS = [
+  { id:'A', t:'记得我的细节' },
+  { id:'B', t:'在我难过的时候陪着我' },
+  { id:'C', t:'愿意为我花时间' },
+  { id:'F', t:'愿意把话说开' }
+];
+
+/* ============ 状态 ============ */
+const S = {
+  view:'cover', idx:0, ans:{}, hasResult:false,
+  meta:{ stage:null, duration:null, distance:null },
+  slider:null, rank:[], startAt:0, elapsed:0
+};
+
+const $ = id => document.getElementById(id);
+const pFill=$('pFill'), qCounter=$('qCounter'), qText=$('qText'), qSub=$('qSub'),
+      qOpts=$('qOpts'), qHint=$('qHint'), btnNext=$('btnNext'),
+      rankList=$('rankList'), slider=$('slider'), sliderNum=$('sliderNum'),
+      modalEl=$('modal'), toastEl=$('toast');
+
+/* ============ 视图切换 ============ */
+function show(name){
+  document.querySelectorAll('.view').forEach(v=>{
+    v.classList.toggle('is-on', v.id==='v-'+name);
+  });
+  S.view=name;
+  window.scrollTo(0,0);
+  const body=document.querySelector('.qbody');
+  if(body) body.scrollTop=0;
+  const sc=document.querySelectorAll('#'+ 'v-'+name +' .scroll');
+  sc.forEach(el=>el.scrollTop=0);
+}
+let toastTimer=null;
+function toast(msg){
+  toastEl.textContent=msg;
+  toastEl.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toastEl.classList.remove('is-on'),2200);
+}
+function openModal(html,cls){
+  modalEl.className='modal is-on'+(cls?' '+cls:'');
+  modalEl.innerHTML=html;
+  modalEl.setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  modalEl.className='modal';
+  modalEl.innerHTML='';
+  modalEl.setAttribute('aria-hidden','true');
+}
+modalEl.addEventListener('click',e=>{
+  if(e.target===modalEl || e.target.closest('[data-close]')) closeModal();
+});
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-goto]');
+  if(!g) return;
+  const to=g.getAttribute('data-goto');
+  if(to==='back'){ show(S.hasResult?'result':'cover'); return; }
+  show(to);
+});
+
+/* ============ 计分 ============ */
+function scoreOf(q,a){
+  if(a===null||a===undefined) return null;
+  if(q.kind==='multi') return 1 + 4*Math.min(a.length,4)/4;
+  if(q.kind==='choice') return q.opts[a].s;
+  let s=a+1;
+  if(q.reverse) s=6-s;
+  return s;
+}
+function levelOf(v){ return v>=70?'high':(v>=40?'mid':'low'); }
+function bandOf(t){
+  if(t<40)  return { key:'low',    name:'关怀感知偏低', note:'较少体验到支持性回应，互动中存在距离感，多处于自我消解的状态。', range:'0–39' };
+  if(t<60)  return { key:'mid',    name:'关怀感知中等', note:'能体验到一定关怀，但常伴随不确定感，偶尔会出现需求缺位。', range:'40–59' };
+  if(t<80)  return { key:'clear',  name:'关怀感知良好', note:'多数情境下能接收到明确反馈，情感支持感相对稳定，体验较清晰。', range:'60–79' };
+  return          { key:'strong', name:'关怀感知极高', note:'高度确信被接纳与支持，互动模式稳定且具可预期性，支持感充足。', range:'80–100' };
+}
+function compute(){
+  const agg={};
+  DIM_ORDER.forEach(d=>{ agg[d]={sum:0,n:0}; });
+  QUESTIONS.forEach(q=>{
+    if(!q.dim) return;
+    const s=scoreOf(q,S.ans[q.id]);
+    if(s===null) return;
+    agg[q.dim].sum+=s;
+    agg[q.dim].n+=1;
+  });
+  // 滑块：补充「情绪回应」维度，权重相当于半道题，不单独决定总分
+  if(S.slider!==null){
+    agg.B.sum += (1 + 4*S.slider/100) * 0.5;
+    agg.B.n   += 0.5;
+  }
+  const dims={};
+  DIM_ORDER.forEach(d=>{
+    const a=agg[d];
+    const mean = a.n ? a.sum/a.n : 3;
+    dims[d]={ mean:+mean.toFixed(2), score:+(((mean-1)/4)*100).toFixed(1) };
+  });
+  let wsum=0, acc=0;
+  DIM_ORDER.forEach(d=>{ acc += dims[d].score*DIMS[d].w; wsum += DIMS[d].w; });
+  const total = Math.round(acc/wsum);
+  return { dims, total, band:bandOf(total) };
+}
+function qualityFlags(){
+  const flags=[];
+  if(S.elapsed>0 && S.elapsed<60) flags.push('您完成测验的用时较短，可能未能充分阅读题目，建议在安静状态下重新作答以获得更准确的评估。');
+  if(S.ans.q25!==undefined && S.ans.q25!==3) flags.push('系统检测到您可能未仔细阅读指导语，建议重新审题后作答，以确保结果的有效性。');
+  let run=0, prev=null, hit=false;
+  QUESTIONS.forEach(q=>{
+    if(!q.dim || q.kind==='multi'){ run=0; prev=null; return; }
+    const a=S.ans[q.id];
+    if(prev!==null && a===prev) run+=1; else run=1;
+    prev=a;
+    if(run>=10) hit=true;
+  });
+  if(hit) flags.push('系统检测到您在连续题目中做出了相同选择，这可能会影响结果的区分度，建议回顾后按真实感受作答。');
+  return flags;
+}
+
+/* ============ 题目渲染 ============ */
+function isAnswered(q){ return S.ans[q.id]!==undefined; }
+function curQ(){ return QUESTIONS[S.idx]; }
+function syncProgress(){
+  const q=curQ();
+  const step = S.idx + (q&&isAnswered(q) ? 1 : 0);
+  pFill.style.width = (step/TOTAL_Q*100) + '%';
+  qCounter.textContent = '第 ' + (S.idx+1) + ' ／ ' + TOTAL_Q + ' 题';
+}
+function renderQuestion(){
+  const q=curQ();
+  syncProgress();
+  qText.textContent=q.text;
+  if(q.sub){ qSub.hidden=false; qSub.textContent=q.sub; } else { qSub.hidden=true; }
+  qOpts.innerHTML='';
+  qOpts.setAttribute('role', q.kind==='multi'?'group':'radiogroup');
+  const ans=S.ans[q.id];
+
+  if(q.kind==='multi'){
+    const picked = ans || [];
+    q.items.forEach((t,i)=>{
+      const chosen = picked.indexOf(i)>=0;
+      const full = picked.length>=q.max && !chosen;
+      const b=document.createElement('button');
+      b.type='button'; b.className='opt sq';
+      b.setAttribute('role','checkbox');
+      b.setAttribute('aria-checked', chosen?'true':'false');
+      b.setAttribute('aria-disabled', full?'true':'false');
+      b.innerHTML='<span class="mark"></span><span>'+t+'</span>';
+      b.addEventListener('click',()=>{
+        if(full) { toast('最多选 '+q.max+' 项，先取消一项再选'); return; }
+        const list=S.ans[q.id]||[];
+        const p=list.indexOf(i);
+        if(p>=0) list.splice(p,1); else list.push(i);
+        S.ans[q.id]=list;
+        renderQuestion();
+      });
+      qOpts.appendChild(b);
+    });
+  } else {
+    const labels = q.kind==='choice' ? q.opts.map(o=>o.t) : (q.scale==='freq'?FREQ:AGREE);
+    labels.forEach((t,i)=>{
+      const chosen = ans===i;
+      const b=document.createElement('button');
+      b.type='button'; b.className='opt';
+      b.setAttribute('role','radio');
+      b.setAttribute('aria-checked', chosen?'true':'false');
+      b.innerHTML='<span class="mark"></span><span>'+t+'</span>';
+      b.addEventListener('click',()=>{ S.ans[q.id]=i; renderQuestion(); });
+      qOpts.appendChild(b);
+    });
+  }
+  updateFooter();
+}
+function updateFooter(){
+  const q=curQ();
+  const a=S.ans[q.id];
+  let ok=false, hint='选一个最接近你的';
+  if(q.kind==='multi'){
+    const k=(a||[]).length;
+    ok = k>0 || S.skipMulti[q.id]===true;
+    hint = k>0 ? ('已选 '+k+' ／ '+q.max+' 项') : '一项都没有可直接继续';
+  } else {
+    ok = a!==undefined;
+    if(ok){
+      const labels = q.kind==='choice' ? q.opts.map(o=>o.t) : (q.scale==='freq'?FREQ:AGREE);
+      hint = '已选择：'+labels[a];
+    }
+  }
+  if(q.kind==='multi' && (a||[]).length>0) hint='已选 '+(a||[]).length+' ／ '+q.max+' 项 · 再点一次可取消';
+  btnNext.disabled=!ok;
+  btnNext.textContent = (S.idx===TOTAL_Q-1) ? '看看结果' : '下一题';
+  qHint.textContent=hint;
+  // 多选题：提供「都不记得」跳过路径
+  let skipBtn = qOpts.parentNode.querySelector('#skipMultiBtn');
+  if(q.kind==='multi'){
+    if(!skipBtn){
+      skipBtn=document.createElement('button');
+      skipBtn.id='skipMultiBtn'; skipBtn.type='button';
+      skipBtn.className='linkish';
+      skipBtn.style.margin='14px auto 0'; skipBtn.style.display='block';
+      skipBtn.textContent='都不记得 / 跳过这一题';
+      skipBtn.addEventListener('click',()=>{
+        S.skipMulti[q.id]=true;
+        S.ans[q.id]=[];
+        renderQuestion();
+        toast('已记为「没有出现过」，可以继续');
+      });
+      qOpts.parentNode.insertBefore(skipBtn, qOpts.nextSibling);
+    }
+    skipBtn.hidden=false;
+  } else if(skipBtn){
+    skipBtn.hidden=true;
+  }
+}
+S.skipMulti={};
+
+/* ============ 作答流程 ============ */
+function goQuestion(i){
+  S.idx=Math.max(0,Math.min(TOTAL_Q-1,i));
+  renderQuestion();
+  show('q');
+}
+$('btnStart').addEventListener('click',()=>show('consent'));
+$('consentBox').addEventListener('change',e=>{
+  $('btnConsent').disabled=!e.target.checked;
+});
+$('btnConsent').addEventListener('click',()=>show('setup'));
+
+['stage','duration','distance'].forEach(g=>{
+  const wrap=document.querySelector('.chips[data-group="'+g+'"]');
+  wrap.addEventListener('click',e=>{
+    const chip=e.target.closest('.chip');
+    if(!chip) return;
+    const on = chip.getAttribute('aria-pressed')==='true';
+    wrap.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+    if(on){ S.meta[g]=null; }
+    else { chip.setAttribute('aria-pressed','true'); S.meta[g]=chip.dataset.val; }
+  });
+});
+function startTest(){
+  S.startAt=Date.now();
+  goQuestion(0);
+}
+$('btnSetupNext').addEventListener('click',startTest);
+$('btnSetupSkip').addEventListener('click',()=>{
+  S.meta={stage:null,duration:null,distance:null};
+  startTest();
+});
+$('btnPrev').addEventListener('click',()=>{
+  if(S.idx===0){ show('setup'); return; }
+  goQuestion(S.idx-1);
+});
+$('btnNext').addEventListener('click',()=>{
+  const q=curQ();
+  if(q.kind==='multi' && !S.ans[q.id]) S.ans[q.id]=[];
+  if(S.idx===TOTAL_Q-1){ finish(); return; }
+  goQuestion(S.idx+1);
+});
+$('btnQuit').addEventListener('click',()=>{
+  openModal('<div class="modal-box"><h3>现在退出吗？</h3><p>这次已经答过的内容不会被保存，下次要重新开始。</p><div class="modal-acts"><button class="btn primary" data-close="1">继续作答</button><button class="btn soft" id="quitYes">退出测试</button></div></div>');
+  $('quitYes').addEventListener('click',()=>{
+    closeModal();
+    S.ans={}; S.idx=0; S.slider=null; S.rank=[]; S.meta={stage:null,duration:null,distance:null};
+    show('cover');
+    toast('已退出，这次的作答没有留下任何记录');
+  });
+});
+
+/* ============ 补充环节 ============ */
+slider.addEventListener('input',()=>{
+  const v=Number(slider.value);
+  S.slider=v;
+  sliderNum.textContent=v;
+  slider.style.setProperty('--p', v+'%');
+});
+function renderRank(){
+  rankList.innerHTML='';
+  RANKS.forEach(r=>{
+    const pos=S.rank.indexOf(r.id);
+    const b=document.createElement('button');
+    b.type='button'; b.className='rank-item';
+    b.setAttribute('aria-checked', pos>=0?'true':'false');
+    b.innerHTML='<span class="num">'+(pos>=0?(pos+1):'·')+'</span><span>'+r.t+'</span>';
+    b.addEventListener('click',()=>{
+      if(pos>=0) S.rank.splice(pos,1); else S.rank.push(r.id);
+      renderRank();
+    });
+    rankList.appendChild(b);
+  });
+}
+renderRank();
+$('btnSuppSkip').addEventListener('click',()=>{ S.slider=null; S.rank=[]; finish(); });
+$('btnSuppGo').addEventListener('click',finish);
+
+/* ============ 结束 → 计算 → 结果 ============ */
+function finish(){
+  S.elapsed = Math.round((Date.now()-S.startAt)/1000);
+  if(S.elapsed<1) S.elapsed=1;
+  pFill.style.width='100%';
+  const res=compute();
+  renderResult(res);
+  S.hasResult=true;
+  show('loading');
+  setTimeout(()=>show('result'),1400);
+}
+
+function renderResult(res){
+  res.code = res.code || anonCode();
+  const {dims,total,band}=res;
+  $('rBand').textContent=band.name;
+  $('rBandNote').innerHTML=band.note+'<br><span style="font-size:12.5px;color:#A29690">'+band.range+' 区间</span>';
+  $('rTotal').textContent=total;
+
+  // 维度条
+  const tr=$('rTrackers');
+  tr.innerHTML='';
+  const sorted=DIM_ORDER.map(d=>({d, s:dims[d].score})).sort((a,b)=>b.s-a.s);
+  const hiDim=sorted[0].d, loDim=sorted[sorted.length-1].d;
+  DIM_ORDER.forEach(d=>{
+    const row=document.createElement('div');
+    row.className='tr-row';
+    row.innerHTML='<span class="tr-name">'+DIMS[d].name+'</span>'+
+      '<span class="tr-line"><i class="'+(d===hiDim?'hi':(d===loDim?'lo':''))+'"></i></span>'+
+      '<span class="tr-val">'+Math.round(dims[d].score)+'</span>';
+    tr.appendChild(row);
+  });
+  // 触发动画
+  setTimeout(()=>{
+    const bars=tr.querySelectorAll('.tr-line i');
+    DIM_ORDER.forEach((d,i)=>{ bars[i].style.width=Math.max(3,dims[d].score)+'%'; });
+  },60);
+
+  $('rHigh').textContent=DIMS[hiDim].name+' · '+Math.round(dims[hiDim].score);
+  $('rLow').textContent=DIMS[loDim].name+' · '+Math.round(dims[loDim].score);
+
+  // 三条解释：最高 / 居中一项 / 最低
+  const mid=sorted[Math.floor(sorted.length/2)].d;
+  const picks=[hiDim, mid, loDim].filter((v,i,arr)=>arr.indexOf(v)===i);
+  while(picks.length<3){
+    const cand=DIM_ORDER.find(d=>picks.indexOf(d)<0);
+    picks.push(cand);
+  }
+  const ex=$('rExplain');
+  ex.innerHTML='';
+  picks.slice(0,3).forEach(d=>{
+    const lv=levelOf(dims[d].score);
+    const card=document.createElement('div');
+    card.className='r-card';
+    card.innerHTML='<h4>'+DIMS[d].name+'</h4><p>'+EXPL[d][lv]+'</p>';
+    ex.appendChild(card);
+  });
+
+  // 两条建议：最低维度 + 最在意的方式（若重复则取次低）
+  const topRank = S.rank[0];
+  let second = (topRank && topRank!==loDim) ? topRank : sorted[sorted.length-2].d;
+  if(second===loDim) second=sorted[sorted.length-3]?sorted[sorted.length-3].d:sorted[0].d;
+  const adv=[loDim, second].filter((v,i,arr)=>arr.indexOf(v)===i);
+  const ad=$('rAdvice');
+  ad.innerHTML='';
+  adv.forEach(d=>{
+    const card=document.createElement('div');
+    card.className='r-card';
+    card.innerHTML='<h4>关于'+DIMS[d].name+'</h4><p>'+ADVICE[d]+'</p>';
+    ad.appendChild(card);
+  });
+
+  // 温和提醒
+  let remind=REMIND[band.key];
+  if(S.meta&&S.meta.stage&&STAGE_NOTE[S.meta.stage]) remind+='\n\n'+STAGE_NOTE[S.meta.stage];
+  if(S.meta&&S.meta.duration==='1个月内') remind+='\n\n另外：你们认识还不到一个月，样本本来就少。现在的分数更像一次初步的观察，过两三周再测，会比今天更接近真实。';
+  const r=$('rRemind');
+  r.style.whiteSpace='pre-line';
+  r.textContent=remind;
+
+  // 边界提示
+  const fw=$('rFlagWrap');
+  fw.innerHTML='';
+  if(dims.D.score<40){
+    fw.innerHTML='<div class="flagbox"><h4>关于边界与安全的提示</h4><p>当前测试结果显示，您在这段关系中可能面临个人边界被侵犯或缺乏安全感的情况。这不仅是沟通技巧的问题，更关乎您的身心安全。建议您：1. 向信任的亲友倾诉当前处境；2. 在关系中保留退路，保护个人隐私与财务安全；3. 如感到持续的心理压力，建议寻求专业心理咨询或相关机构的支持。</p></div>';
+  }
+  // 作答质量
+  const flags=qualityFlags();
+  if(flags.length){
+    const box=document.createElement('div');
+    box.className='flagbox';
+    box.style.background='#FAF6EE';
+    box.style.borderColor='#EEE2D2';
+    box.innerHTML='<h4 style="color:#8A7350">关于这次作答</h4><p style="color:#796A54">'+flags.join(' ') + ' 这不影响你现在看到的分数，只是提醒：如果你愿意，隔一天再答一次，会更接近真实感受。</p>';
+    fw.appendChild(box);
+  }
+  if(S.elapsed>=60 && !flags.length){
+    const tip=document.createElement('p');
+    tip.style.cssText='margin:18px 26px 0;font-size:13.5px;line-height:1.8;color:#9A8D86';
+    tip.textContent='作答用时约 '+Math.floor(S.elapsed/60)+' 分 '+(S.elapsed%60)+' 秒。';
+    fw.appendChild(tip);
+  }
+}
+
+/* ============ 结果海报（3:4，1080×1440） ============ */
+function anonCode(){
+  const t=Date.now().toString(36).toUpperCase().slice(-4);
+  const r=Math.floor(Math.random()*1679616).toString(36).toUpperCase().padStart(4,'0');
+  return 'XS-'+t+'-'+r;
+}
+function wrapText(g,text,x,y,maxW,lh){
+  let line='', yy=y;
+  for(const ch of text){
+    if(g.measureText(line+ch).width>maxW){ g.fillText(line,x,yy); line=ch; yy+=lh; }
+    else line+=ch;
+  }
+  if(line){ g.fillText(line,x,yy); yy+=lh; }
+  return yy;
+}
+function buildPoster(res){
+  const W=1080,H=1440;
+  const c=document.createElement('canvas');
+  c.width=W; c.height=H;
+  const g=c.getContext('2d');
+  const serif='"Songti SC","STSong","Noto Serif SC","Source Han Serif SC","SimSun",serif';
+  const sans='-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif';
+  const cx=W/2;
+
+  g.fillStyle='#FBF6F0'; g.fillRect(0,0,W,H);
+  const grad=g.createRadialGradient(cx,120,10,cx,120,700);
+  grad.addColorStop(0,'rgba(255,253,249,.95)');
+  grad.addColorStop(1,'rgba(255,253,249,0)');
+  g.fillStyle=grad; g.fillRect(0,0,W,700);
+
+  g.strokeStyle='#E7DBD1'; g.lineWidth=2; g.strokeRect(38,38,W-76,H-76);
+
+  // 顶部小标识
+  g.fillStyle='#B98A86';
+  g.beginPath(); g.arc(cx,120,7,0,Math.PI*2); g.fill();
+  g.strokeStyle='#D8B3AF'; g.lineWidth=2.5; g.lineCap='round';
+  [26,40].forEach((rad,i)=>{
+    g.beginPath(); g.arc(cx,120,rad,-0.55,0.55); g.stroke();
+    g.beginPath(); g.arc(cx,120,rad,Math.PI-0.55,Math.PI+0.55); g.stroke();
+  });
+  g.strokeStyle='#E0D2C8'; g.lineWidth=2;
+  g.beginPath(); g.arc(cx,120,56,-0.5,0.5); g.stroke();
+  g.beginPath(); g.arc(cx,120,56,Math.PI-0.5,Math.PI+0.5); g.stroke();
+
+  g.textAlign='center';
+  g.fillStyle='#9A8D86'; g.font='400 25px '+sans;
+  g.fillText('关 系 感 知 型 心 理 测 试', cx, 216);
+
+  g.fillStyle='#3F3733'; g.font='600 86px '+serif;
+  g.fillText('亲密关系关怀感知评估', cx, 340);
+
+  g.fillStyle='#8C7F79'; g.font='400 28px '+sans;
+  g.fillText('本结果反映您的个人感受，不构成对伴侣的评价', cx, 396);
+
+  // 分档
+  g.fillStyle='#B98A86'; g.font='400 24px '+sans;
+  g.fillText('关 怀 感 知 水 平', cx, 486);
+  g.fillStyle='#3F3733'; g.font='600 46px '+serif;
+  g.fillText(res.band.name, cx, 546);
+
+  // 总分
+  g.fillStyle='#3F3733'; g.font='600 104px '+serif;
+  const tw=g.measureText(String(res.total)).width;
+  g.textAlign='left';
+  g.fillText(String(res.total), cx-tw/2-26, 700);
+  g.textAlign='center';
+  g.fillStyle='#9A8D86'; g.font='400 26px '+sans;
+  g.fillText('／ 100', cx+tw/2+34, 700);
+
+  // 分隔
+  g.strokeStyle='#E7DBD1'; g.lineWidth=1.5;
+  g.beginPath(); g.moveTo(120,748); g.lineTo(W-120,748); g.stroke();
+
+  // 六维度条
+  const rowsY=[806,872,938,1004,1070,1136];
+  let hiKey=DIM_ORDER[0], loKey=DIM_ORDER[0];
+  DIM_ORDER.forEach(d=>{
+    if(res.dims[d].score>res.dims[hiKey].score) hiKey=d;
+    if(res.dims[d].score<res.dims[loKey].score) loKey=d;
+  });
+  DIM_ORDER.forEach((d,i)=>{
+    const y=rowsY[i];
+    const score=res.dims[d].score;
+    g.textAlign='left';
+    g.fillStyle='#6F635D'; g.font='400 25px '+sans;
+    g.fillText(DIMS[d].name, 120, y);
+    g.fillStyle='#EFE3DA';
+    g.fillRect(300, y-16, 520, 12);
+    g.fillStyle = d===hiKey ? '#B98A86' : (d===loKey ? '#93A9B4' : '#D8B3AF');
+    g.fillRect(300, y-16, Math.max(10,520*score/100), 12);
+    g.textAlign='right';
+    g.fillStyle='#9A8D86'; g.font='400 22px '+sans;
+    g.fillText(String(Math.round(score)), 900, y);
+    g.textAlign='center';
+  });
+
+  // 免责声明
+  g.textAlign='left';
+  g.fillStyle='#A29690'; g.font='400 21px '+sans;
+  wrapText(g,'本测试基于心理测量学原则设计，仅供自我觉察与沟通参考，不构成心理诊断、情感判决或专业咨询建议。',120,1252,840,34);
+
+  // 匿名编号
+  g.textAlign='center';
+  g.fillStyle='#8C7F79'; g.font='400 22px '+sans;
+  g.fillText('匿名编号  '+res.code, cx, 1362);
+  g.fillStyle='#A29690'; g.font='400 20px '+sans;
+  g.fillText('本地计算 · 匿名 · 不构成诊断', cx, 1398);
+
+  return c.toDataURL('image/png');
+}
+$('btnPoster').addEventListener('click',()=>{
+  const res=getLastRes();
+  const url=buildPoster(res);
+  openModal(
+    '<div class="modal-box">'+
+      '<img class="modal-img" src="'+url+'" alt="结果海报预览">'+
+      '<p class="poster-hint">长按图片保存到相册；也可以用下面的按钮下载。<br>海报上只有分档、维度条和匿名编号，不包含任何一道题的答案。</p>'+
+      '<div class="poster-actions">'+
+        '<button class="btn soft" data-close="1" style="flex:1">关闭</button>'+
+        '<a class="btn primary" style="flex:1;text-decoration:none" download="她对你的关心程度-结果海报.png" href="'+url+'">下载</a>'+
+      '</div>'+
+    '</div>','poster-modal');
+});
+let lastRes=null;
+function getLastRes(){ return lastRes || compute(); }
+const _origRender=renderResult;
+renderResult=function(res){ lastRes=res; return _origRender(res); };
+
+/* ============ 重测 ============ */
+$('btnRestart').addEventListener('click',()=>{
+  S.ans={}; S.idx=0; S.slider=null; S.rank=[]; S.hasResult=false; S.elapsed=0;
+  S.skipMulti={};
+  S.meta={stage:null,duration:null,distance:null};
+  slider.value=50; sliderNum.textContent='—'; slider.style.setProperty('--p','50%');
+  document.querySelectorAll('.chips .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+  renderRank();
+  show('cover');
+  toast('已清空，可以重新开始');
+});
+
+show('cover');
+})();
+</script>
+
+</html>
+<!-- （注：内容由AI生成） -->
