@@ -1253,7 +1253,7 @@ function renderResult(res){
   // 温和提醒
   let remind=REMIND[band.key];
   if(S.meta&&S.meta.stage&&STAGE_NOTE[S.meta.stage]) remind+='\n\n'+STAGE_NOTE[S.meta.stage];
-  if(S.meta&&S.meta.duration==='1个月内') remind+='\n\n另外：你们认识还不到一个月，样本本来就少。现在的分数更像一次初步的观察，过两三周再测，会比今天更接近真实。';
+  if(S.meta&&S.meta.duration==='1个月内') remind+='\n\n你们目前的接触时间尚短，尚缺乏足够的日常情境来验证长期的互动模式。此时的结果更倾向于反映“当前的初步感受”，而非稳定的关系状态。您可以将此报告作为初期探索参考，或建议在两至三周后复测对比。';
   const r=$('rRemind');
   r.style.whiteSpace='pre-line';
   r.textContent=remind;
