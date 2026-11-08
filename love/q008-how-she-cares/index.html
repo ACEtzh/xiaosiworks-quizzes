@@ -814,7 +814,7 @@ const QUESTIONS = [
     text:'对方愿意向你表达其在意，也愿意接收你提出的需求。' },
   { id:'q19', dim:'A', kind:'multi', max:4,
     text:'近两周内，对方出现过下列哪些主动关注行为？',
-    sub:'最多选 4 项。一项都没有的话，点下面的「都不记得」跳过即可。',
+    sub:'最多选 4 项。一项都没有的话，选最后一项「以上都没有出现过」。',
     items:['主动分享其日常近况，并等待你的回应',
            '记住并留意你的重要日程',
            '留意你近期喜好与反感的事物',
@@ -1040,6 +1040,7 @@ function renderQuestion(){
       b.innerHTML='<span class="mark"></span><span>'+t+'</span>';
       b.addEventListener('click',()=>{
         if(full) { toast('最多选 '+q.max+' 项，先取消一项再选'); return; }
+        S.skipMulti[q.id]=false;
         const list=S.ans[q.id]||[];
         const p=list.indexOf(i);
         if(p>=0) list.splice(p,1); else list.push(i);
@@ -1048,6 +1049,18 @@ function renderQuestion(){
       });
       qOpts.appendChild(b);
     });
+    // 末项「以上都没有出现过」：选它等于全不选，按最低分计入，与其他项互斥
+    const nb=document.createElement('button');
+    nb.type='button'; nb.className='opt sq';
+    nb.setAttribute('role','checkbox');
+    nb.setAttribute('aria-checked', S.skipMulti[q.id]===true?'true':'false');
+    nb.innerHTML='<span class="mark"></span><span>以上都没有出现过</span>';
+    nb.addEventListener('click',()=>{
+      if(S.skipMulti[q.id]){ S.skipMulti[q.id]=false; delete S.ans[q.id]; }
+      else { S.skipMulti[q.id]=true; S.ans[q.id]=[]; }
+      renderQuestion();
+    });
+    qOpts.appendChild(nb);
   } else {
     const labels = q.kind==='choice' ? q.opts.map(o=>o.t) : (q.scale==='freq'?FREQ:AGREE);
     labels.forEach((t,i)=>{
@@ -1070,7 +1083,8 @@ function updateFooter(){
   if(q.kind==='multi'){
     const k=(a||[]).length;
     ok = k>0 || S.skipMulti[q.id]===true;
-    hint = k>0 ? ('已选 '+k+' ／ '+q.max+' 项') : '一项都没有可直接继续';
+    hint = k>0 ? ('已选 '+k+' ／ '+q.max+' 项')
+         : (S.skipMulti[q.id] ? '已记为「一项都没有」' : '选一项，或选最后一项');
   } else {
     ok = a!==undefined;
     if(ok){
@@ -1082,29 +1096,6 @@ function updateFooter(){
   btnNext.disabled=!ok;
   btnNext.textContent = (S.idx===TOTAL_Q-1) ? '看看结果' : '下一题';
   qHint.textContent=hint;
-  // 多选题：提供「都不记得」跳过路径
-  let skipBtn = qOpts.parentNode.querySelector('#skipMultiBtn');
-  if(q.kind==='multi'){
-    if(!skipBtn){
-      skipBtn=document.createElement('button');
-      skipBtn.id='skipMultiBtn'; skipBtn.type='button';
-      skipBtn.className='linkish';
-      skipBtn.style.margin='14px auto 0'; skipBtn.style.display='block';
-      skipBtn.textContent='都不记得 / 跳过这一题';
-      skipBtn.addEventListener('click',()=>{
-        const cq=curQ();
-        S.skipMulti[cq.id]=true;
-        S.ans[cq.id]=[];
-        toast('已记为「没有出现过」，可以继续');
-        if(S.idx===TOTAL_Q-1){ finish(); return; }
-        goQuestion(S.idx+1);
-      });
-      qOpts.parentNode.insertBefore(skipBtn, qOpts.nextSibling);
-    }
-    skipBtn.hidden=false;
-  } else if(skipBtn){
-    skipBtn.hidden=true;
-  }
 }
 S.skipMulti={};
 
