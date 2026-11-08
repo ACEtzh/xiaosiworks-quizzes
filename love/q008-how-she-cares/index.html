@@ -1092,10 +1092,12 @@ function updateFooter(){
       skipBtn.style.margin='14px auto 0'; skipBtn.style.display='block';
       skipBtn.textContent='都不记得 / 跳过这一题';
       skipBtn.addEventListener('click',()=>{
-        S.skipMulti[q.id]=true;
-        S.ans[q.id]=[];
-        renderQuestion();
+        const cq=curQ();
+        S.skipMulti[cq.id]=true;
+        S.ans[cq.id]=[];
         toast('已记为「没有出现过」，可以继续');
+        if(S.idx===TOTAL_Q-1){ finish(); return; }
+        goQuestion(S.idx+1);
       });
       qOpts.parentNode.insertBefore(skipBtn, qOpts.nextSibling);
     }
